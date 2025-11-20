@@ -20,6 +20,9 @@ export default function AladhanVoice({ color }: { color: any }) {
   // Stable keys to map times and toggles
   const PRAYER_KEYS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"] as const;
 
+  // Check if today is Friday
+  const isFriday = new Date().getDay() === 5;
+
   const [prayers, setPrayers] = useState([
     {
       name: "الفجر",
@@ -30,12 +33,13 @@ export default function AladhanVoice({ color }: { color: any }) {
       notification: true,
     },
     {
-      name: "الظهر",
+      name: isFriday ? "الجمعة" : "الظهر",
       icon: EldohrIcon,
       time: "00:00",
       time24: "00:00",
       aldhan: true,
       notification: true,
+      isFriday: isFriday,
     },
     {
       name: "العصر",
@@ -103,13 +107,15 @@ export default function AladhanVoice({ color }: { color: any }) {
           const time24 = prayerTimes.timings[key] || "00:00";
           return {
             ...prayer,
+            name: index === 1 && isFriday ? "الجمعة" : prayer.name,
             time: formatTo12Hour(time24) || "00:00",
             time24: time24,
+            isFriday: index === 1 ? isFriday : false,
           };
         })
       );
     }
-  }, [prayerTimes?.timings]);
+  }, [prayerTimes?.timings, isFriday]);
 
   // Map UI toggles to hook include map per prayer
   const includeMap = useMemo(() => {
@@ -140,13 +146,22 @@ export default function AladhanVoice({ color }: { color: any }) {
       >
         {prayers.map((prayer, index) => {
           // Check if this prayer is the next prayer
-          const isNextPrayer = nextPrayerInfo?.nextPrayer === prayer.name;
+          const isNextPrayer =
+            nextPrayerInfo?.nextPrayer === prayer.name ||
+            (isFriday && index === 1 && nextPrayerInfo?.nextPrayer === "الظهر");
+          const isFridayPrayer = prayer.isFriday === true;
 
           return (
             <View
               style={{
                 borderRadius: 16,
-                backgroundColor: isNextPrayer ? `${color.primary}` : color.bg20,
+                backgroundColor: isNextPrayer
+                  ? `${color.primary}`
+                  : isFridayPrayer
+                    ? `${color.primary}1A`
+                    : color.bg20,
+                borderWidth: isFridayPrayer && !isNextPrayer ? 2 : 0,
+                borderColor: isFridayPrayer ? color.primary : "transparent",
               }}
               key={index}
               className="flex  relative p-4 flex-row items-center justify-between"
@@ -182,7 +197,11 @@ export default function AladhanVoice({ color }: { color: any }) {
                 />
                 <Text
                   style={{
-                    color: isNextPrayer ? color.background : `${color.black}`,
+                    color: isNextPrayer
+                      ? color.background
+                      : isFridayPrayer
+                        ? color.primary
+                        : `${color.black}`,
                   }}
                   className={`text-lg font-bold`}
                 >

@@ -509,7 +509,7 @@ export default function AzkarSwiper({ azkar, color }: Props) {
             opacity: 0,
             pointerEvents: "none",
             backgroundColor: color.bg20,
-            borderRadius: 20,
+            // borderRadius: 20,
             paddingVertical: 24,
             paddingHorizontal: 24,
             minWidth: 300,
@@ -548,9 +548,9 @@ export default function AzkarSwiper({ azkar, color }: Props) {
             }}
           >
             <AppLogo
-              size={60}
-              primaryColor={color.primary}
-              secondaryColor={color.primary}
+              size={32}
+              primaryColor={color.primary + "80"}
+              secondaryColor={color.primary + "80"}
               backgroundColor="transparent"
             />
           </View>
@@ -824,7 +824,7 @@ const AzkarCardMemo = memo(
         >
           <Text
             ellipsizeMode="tail"
-            style={[styles.content, { color: color.darkText }]}
+            style={[styles.content, { color: color.text }]}
           >
             {zikr.content}
           </Text>

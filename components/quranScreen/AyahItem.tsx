@@ -6,6 +6,7 @@ import { getColors } from "@/constants/Colors";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { FontFamily } from "@/constants/FontFamily";
 import { useFontSize } from "@/context/FontSizeContext";
+import { FontAwesome } from "@expo/vector-icons";
 
 interface Ayah {
   numberInSurah: number;
@@ -24,11 +25,10 @@ const AyahItem = memo(function AyahItem({
   ayah,
   onPress,
   isBookmarked = false,
-  onToggleBookmark,
 }: AyahItemProps) {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
-  const { fontSize } = useFontSize();
+  const { fontSize, isBold } = useFontSize();
   const [showCopied, setShowCopied] = useState(false);
   const copiedAnim = useRef(new Animated.Value(0)).current;
 
@@ -43,13 +43,6 @@ const AyahItem = memo(function AyahItem({
     const str = String(value);
     const arabicDigits = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
     return str.replace(/[0-9]/g, (d) => arabicDigits[Number(d)]);
-  };
-
-  const handleBookmarkPress = (e: any) => {
-    e.stopPropagation();
-    if (onToggleBookmark) {
-      onToggleBookmark(ayah.numberInSurah);
-    }
   };
 
   const copyToClipboard = useCallback(async () => {
@@ -85,11 +78,12 @@ const AyahItem = memo(function AyahItem({
       <TouchableOpacity
         key={ayah.numberInSurah}
         style={{
-          backgroundColor: color.bg20,
+          backgroundColor: isBookmarked ? color.primary : color.bg20,
           paddingVertical: 12,
           paddingHorizontal: 16,
           borderRadius: 16,
           width: "100%",
+
           borderWidth: 0,
         }}
         onPress={() => onPress(ayah)}
@@ -99,7 +93,7 @@ const AyahItem = memo(function AyahItem({
           style={{
             flexDirection: "row",
             alignItems: "flex-start",
-            gap: 10,
+            gap: 8,
           }}
         >
           <View
@@ -120,10 +114,10 @@ const AyahItem = memo(function AyahItem({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                fontSize: fontSize - 2,
+                fontSize: fontSize - 3,
 
                 fontFamily: FontFamily.bold,
-                color: color.primary,
+                color: isBookmarked ? color.white : color.primary,
               }}
             >
               ﴿ {toArabicDigits(ayah.numberInSurah)} ﴾
@@ -133,36 +127,17 @@ const AyahItem = memo(function AyahItem({
           <Text
             style={{
               fontSize: fontSize,
-              fontFamily: FontFamily.quran,
+              fontFamily: isBold ? FontFamily.quranBold : FontFamily.quran,
               flex: 1,
-              color: color.darkText,
+              color: isBookmarked ? color.white : color.text,
+              letterSpacing: 0.6,
+              textAlign: "justify",
+              textAlignVertical: "center",
+           
             }}
           >
             {ayah.text}
           </Text>
-
-          {onToggleBookmark && (
-            <TouchableOpacity
-              style={{
-                width: 32,
-                height: 32,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 99,
-                backgroundColor: isBookmarked ? color.primary : "transparent",
-
-                borderColor: isBookmarked ? color.primary : color.border,
-                marginLeft: 8,
-              }}
-              onPress={handleBookmarkPress}
-            >
-              <FontAwesome5
-                name="bookmark"
-                size={14}
-                color={isBookmarked ? color.white : color.text}
-              />
-            </TouchableOpacity>
-          )}
         </View>
       </TouchableOpacity>
 

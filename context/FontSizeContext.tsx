@@ -15,6 +15,9 @@ interface FontSizeContextType {
   increaseFontSize: () => void;
   decreaseFontSize: () => void;
   resetFontSize: () => void;
+  isBold: boolean;
+  setIsBold: (bold: boolean) => void;
+  toggleBold: () => void;
 }
 
 const FontSizeContext = createContext<FontSizeContextType | undefined>(
@@ -26,30 +29,37 @@ interface FontSizeProviderProps {
 }
 
 const FONT_SIZE_KEY = "quran_font_size";
+const FONT_BOLD_KEY = "quran_font_bold";
 const MIN_FONT_SIZE = 16;
 const MAX_FONT_SIZE = 32;
 const DEFAULT_FONT_SIZE = 20;
+const DEFAULT_BOLD = false;
 
 export const FontSizeProvider: React.FC<FontSizeProviderProps> = ({
   children,
 }) => {
   const [fontSize, setFontSizeState] = useState(DEFAULT_FONT_SIZE);
+  const [isBold, setIsBoldState] = useState(DEFAULT_BOLD);
 
   useEffect(() => {
-    const loadFontSize = async () => {
+    const loadFontSettings = async () => {
       try {
-        const stored = await AsyncStorage.getItem(FONT_SIZE_KEY);
-        if (stored) {
-          const size = parseInt(stored, 10);
+        const storedSize = await AsyncStorage.getItem(FONT_SIZE_KEY);
+        if (storedSize) {
+          const size = parseInt(storedSize, 10);
           if (size >= MIN_FONT_SIZE && size <= MAX_FONT_SIZE) {
             setFontSizeState(size);
           }
         }
+        const storedBold = await AsyncStorage.getItem(FONT_BOLD_KEY);
+        if (storedBold !== null) {
+          setIsBoldState(storedBold === "true");
+        }
       } catch (error) {
-        console.error("Error loading font size:", error);
+        console.error("Error loading font settings:", error);
       }
     };
-    loadFontSize();
+    loadFontSettings();
   }, []);
 
   const setFontSize = useCallback(async (size: number) => {
@@ -72,7 +82,21 @@ export const FontSizeProvider: React.FC<FontSizeProviderProps> = ({
 
   const resetFontSize = useCallback(() => {
     setFontSize(DEFAULT_FONT_SIZE);
+    setIsBold(DEFAULT_BOLD);
   }, [setFontSize]);
+
+  const setIsBold = useCallback(async (bold: boolean) => {
+    setIsBoldState(bold);
+    try {
+      await AsyncStorage.setItem(FONT_BOLD_KEY, bold.toString());
+    } catch (error) {
+      console.error("Error saving font bold:", error);
+    }
+  }, []);
+
+  const toggleBold = useCallback(() => {
+    setIsBold(!isBold);
+  }, [isBold, setIsBold]);
 
   const contextValue = useMemo(
     () => ({
@@ -81,8 +105,20 @@ export const FontSizeProvider: React.FC<FontSizeProviderProps> = ({
       increaseFontSize,
       decreaseFontSize,
       resetFontSize,
+      isBold,
+      setIsBold,
+      toggleBold,
     }),
-    [fontSize, setFontSize, increaseFontSize, decreaseFontSize, resetFontSize]
+    [
+      fontSize,
+      setFontSize,
+      increaseFontSize,
+      decreaseFontSize,
+      resetFontSize,
+      isBold,
+      setIsBold,
+      toggleBold,
+    ]
   );
 
   return (

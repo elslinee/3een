@@ -106,7 +106,9 @@ export function SurahScreenContent() {
         ref={scrollViewRef}
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContent}
+        contentContainerStyle={
+          isInlineMode ? styles.scrollViewContent : styles.scrollViewListContent
+        }
         scrollEventThrottle={16}
         onScroll={handleMainScroll}
         onMomentumScrollEnd={handleMainScroll}
@@ -136,12 +138,21 @@ export function SurahScreenContent() {
         onClose={() => setShowAyahModal(false)}
         ayah={selectedAyah}
         surahName={surahData?.name}
+        surahNumber={surahData?.number}
         isFavorite={
           selectedAyah ? favorites.includes(selectedAyah.numberInSurah) : false
         }
         onToggleFavorite={() => {
           if (selectedAyah) {
             toggleFavorite(selectedAyah.numberInSurah, surahData);
+          }
+        }}
+        isBookmarked={
+          selectedAyah ? bookmark === selectedAyah.numberInSurah : false
+        }
+        onToggleBookmark={() => {
+          if (selectedAyah) {
+            toggleBookmark(selectedAyah.numberInSurah);
           }
         }}
       />
@@ -210,7 +221,7 @@ const createStyles = (color: any, fontSize: number) =>
     container: {
       flex: 1,
       backgroundColor: color.background,
-      paddingTop: 32,
+      paddingTop: 16,
     },
     goBackButton: {
       position: "absolute",
@@ -234,8 +245,12 @@ const createStyles = (color: any, fontSize: number) =>
     scrollView: {
       flex: 1,
     },
+    scrollViewListContent: {
+      paddingHorizontal: 8,
+      paddingBottom: 40,
+    },
     scrollViewContent: {
-      padding: 16,
+      paddingHorizontal: 16,
       paddingBottom: 40,
     },
     contentContainer: {

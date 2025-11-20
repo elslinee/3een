@@ -148,7 +148,7 @@ export default function Tasbeeh() {
             {/* Statistics Section */}
             <View
               style={{
-                paddingHorizontal: 20,
+                paddingHorizontal: 16,
                 paddingTop: 20,
                 paddingBottom: 16,
               }}

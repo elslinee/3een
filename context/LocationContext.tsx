@@ -41,6 +41,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
   const SAVED_ADDRESS_KEY = "savedAddress";
   const LAST_LOCATION_REQUEST_KEY = "lastLocationRequest";
   const FIRST_LAUNCH_DONE_KEY = "firstLaunchLocationDone";
+  const PERMISSION_DENIED_KEY = "locationPermissionDenied";
 
   // Load saved location data from AsyncStorage
   const loadSavedLocationData = async () => {
@@ -148,21 +149,37 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         }
       }
 
-      const PERMISSION_ASKED_KEY = "locationPermissionAsked";
-
       // Check existing permission without prompting first
-      let { status: existingStatus } =
+      let { status: existingStatus, canAskAgain } =
         await Location.getForegroundPermissionsAsync();
 
-      // If not granted, only request if forced or never asked before
+      // If not granted, check if permission was denied permanently
       if (existingStatus !== "granted") {
-        const askedBefore = await AsyncStorage.getItem(PERMISSION_ASKED_KEY);
+        const permissionDenied = await AsyncStorage.getItem(
+          PERMISSION_DENIED_KEY
+        );
 
-        // Only ask for permission if:
-        // 1. Force request is true (user manually requested from settings)
+        // If permission was denied and can't ask again, don't request
+        if (permissionDenied === "true" && canAskAgain === false) {
+          setAddress("الموقع غير متاح");
+          setErrorMsg("اضغط لتفعيل الموقع");
+          setIsLoading(false);
+          return;
+        }
+
+        // Only request if forced (user manually requested from settings)
         if (forceRequest) {
-          const { status } = await Location.requestForegroundPermissionsAsync();
-          await AsyncStorage.setItem(PERMISSION_ASKED_KEY, "true");
+          const { status, canAskAgain: newCanAskAgain } =
+            await Location.requestForegroundPermissionsAsync();
+
+          // Save denial status if permission was denied and can't ask again
+          if (status !== "granted" && newCanAskAgain === false) {
+            await AsyncStorage.setItem(PERMISSION_DENIED_KEY, "true");
+          } else if (status === "granted") {
+            // Clear denial status if permission was granted
+            await AsyncStorage.removeItem(PERMISSION_DENIED_KEY);
+          }
+
           existingStatus = status;
         } else {
           // لا نطلب الصلاحية تلقائياً، فقط نعرض عنوان افتراضي
@@ -174,6 +191,10 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       }
 
       if (existingStatus !== "granted") {
+        // Save denial status if can't ask again
+        if (canAskAgain === false) {
+          await AsyncStorage.setItem(PERMISSION_DENIED_KEY, "true");
+        }
         // لا نطلب الصلاحية تلقائياً، فقط نعرض عنوان افتراضي
         setAddress("الموقع غير متاح");
         setErrorMsg("اضغط لتفعيل الموقع");
@@ -247,9 +268,24 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       await Linking.openSettings();
     } catch {}
     // Small delay to allow user to toggle then return
-    // Force request permission when user comes back from settings
-    setTimeout(() => {
-      getCurrentLocation(true);
+    // Check permission status when user comes back from settings
+    // Only request if user manually enabled it in settings
+    setTimeout(async () => {
+      const { status, canAskAgain } =
+        await Location.getForegroundPermissionsAsync();
+      if (status === "granted") {
+        // Permission was granted, clear denial status and get location
+        await AsyncStorage.removeItem(PERMISSION_DENIED_KEY);
+        await getCurrentLocation(true);
+      } else if (canAskAgain) {
+        // Can ask again, so user might have changed settings
+        await getCurrentLocation(true);
+      } else {
+        // Permission denied permanently, don't request again
+        await AsyncStorage.setItem(PERMISSION_DENIED_KEY, "true");
+        setAddress("الموقع غير متاح");
+        setErrorMsg("اضغط لتفعيل الموقع");
+      }
     }, 1000);
   };
 
@@ -270,13 +306,25 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           const firstLaunchDone = await AsyncStorage.getItem(
             FIRST_LAUNCH_DONE_KEY
           );
+          const permissionDenied = await AsyncStorage.getItem(
+            PERMISSION_DENIED_KEY
+          );
 
-          if (!firstLaunchDone) {
-            const { status } =
+          // Only ask if first launch and permission wasn't permanently denied
+          if (!firstLaunchDone && permissionDenied !== "true") {
+            const { status, canAskAgain } =
               await Location.requestForegroundPermissionsAsync();
+
+            // Save denial status if permission was denied and can't ask again
+            if (status !== "granted" && canAskAgain === false) {
+              await AsyncStorage.setItem(PERMISSION_DENIED_KEY, "true");
+            }
+
             if (status === "granted") {
               await getCurrentLocation(true);
               await AsyncStorage.setItem(FIRST_LAUNCH_DONE_KEY, "true");
+              // Clear denial status if permission was granted
+              await AsyncStorage.removeItem(PERMISSION_DENIED_KEY);
               return;
             }
             // لم يتم منح الصلاحية في أول تشغيل

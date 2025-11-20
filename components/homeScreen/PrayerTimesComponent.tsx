@@ -17,6 +17,9 @@ import { FontFamily } from "@/constants/FontFamily";
 export default function PrayerTimesComponent({ color }: { color: any }) {
   const { prayerTimes, loading } = usePrayerTimes();
 
+  // Check if today is Friday
+  const isFriday = new Date().getDay() === 5;
+
   // Get next prayer info
   const nextPrayerInfo = prayerTimes?.timings
     ? getNextPrayerTime(prayerTimes.timings)
@@ -30,10 +33,11 @@ export default function PrayerTimesComponent({ color }: { color: any }) {
       time24: prayerTimes?.timings?.Fajr || "00:00",
     },
     {
-      name: "الظهر",
+      name: isFriday ? "الجمعة" : "الظهر",
       icon: EldohrIcon,
       time: formatTo12Hour(prayerTimes?.timings?.Dhuhr || "") || "00:00",
       time24: prayerTimes?.timings?.Dhuhr || "00:00",
+      isFriday: isFriday,
     },
     {
       name: "العصر",
@@ -66,17 +70,26 @@ export default function PrayerTimesComponent({ color }: { color: any }) {
         className="flex-row  "
       >
         {prayers.map((prayer, index) => {
-          const isNextPrayer = nextPrayerInfo?.nextPrayer === prayer.name;
+          const isNextPrayer =
+            nextPrayerInfo?.nextPrayer === prayer.name ||
+            (isFriday && index === 1 && nextPrayerInfo?.nextPrayer === "الظهر");
+          const isFridayPrayer = prayer.isFriday === true;
           return (
             <View
               key={index}
               style={{
-                backgroundColor: isNextPrayer ? color.primary : "transparent",
+                backgroundColor: isNextPrayer
+                  ? color.primary
+                  : isFridayPrayer
+                    ? `${color.primary}33`
+                    : "transparent",
                 borderRadius: 10,
                 padding: 8,
                 flex: 1,
                 alignItems: "center",
                 overflow: "hidden",
+                borderWidth: isFridayPrayer ? 2 : 0,
+                borderColor: isFridayPrayer ? color.primary : "transparent",
               }}
             >
               <Text
@@ -85,7 +98,11 @@ export default function PrayerTimesComponent({ color }: { color: any }) {
                   textOverflow: "ellipsis",
                   fontSize: 11,
                   fontFamily: FontFamily.medium,
-                  color: isNextPrayer ? "white" : color.text20,
+                  color: isNextPrayer
+                    ? "white"
+                    : isFridayPrayer
+                      ? color.primary
+                      : color.text20,
                 }}
                 numberOfLines={1}
               >
@@ -95,7 +112,11 @@ export default function PrayerTimesComponent({ color }: { color: any }) {
                 style={{
                   fontSize: 10,
                   fontFamily: FontFamily.bold,
-                  color: isNextPrayer ? "white" : color.darkText,
+                  color: isNextPrayer
+                    ? "white"
+                    : isFridayPrayer
+                      ? color.primary
+                      : color.darkText,
                 }}
                 numberOfLines={1}
               >

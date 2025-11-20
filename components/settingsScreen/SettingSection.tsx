@@ -23,7 +23,7 @@ export const SettingSection: React.FC<SettingSectionProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     marginBottom: 24,
   },
   title: {

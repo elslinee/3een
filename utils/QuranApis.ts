@@ -3,33 +3,39 @@ let QuranData: LocalSurah[] | null = null;
 
 // تعريف الأنواع
 interface LocalAyah {
-  id: number;
-  ar: string;
-  en: string;
-  filename?: string;
-  path?: string;
-  dir?: string;
-  size?: number;
+  number: number;
+  text: {
+    ar: string;
+    en?: string;
+  };
+  juz: number;
+  page: number;
+  sajda: boolean;
 }
 
 interface LocalSurah {
-  id: number;
-  name: string;
-  name_en: string;
-  name_translation: string;
-  words?: number;
-  letters?: number;
-  type: string;
-  type_en: string;
-  ar: string;
-  en: string;
-  array: LocalAyah[];
+  number: number;
+  name: {
+    ar: string;
+    en?: string;
+    transliteration?: string;
+  };
+  revelation_place: {
+    ar: string;
+    en?: string;
+  };
+  verses_count: number;
+  words__count?: number;
+  letters__count?: number;
+  verses: LocalAyah[];
 }
 
 interface ApiAyah {
   numberInSurah: number;
   text: string;
   translation?: string;
+  page?: number;
+  juz?: number;
 }
 
 interface ApiSurahData {
@@ -49,16 +55,28 @@ interface ApiResponse {
 
 // دالة لتحويل البيانات المحلية إلى تنسيق API
 const convertLocalToApiFormat = (localSurah: LocalSurah): ApiSurahData => {
+  // Determine revelation type from Arabic text if English is not available
+  const revelationType =
+    localSurah.revelation_place.en === "meccan"
+      ? "Meccan"
+      : localSurah.revelation_place.en === "medinan"
+        ? "Medinan"
+        : localSurah.revelation_place.ar === "مكية"
+          ? "Meccan"
+          : "Medinan";
+
   return {
-    number: localSurah.id,
-    name: localSurah.name,
-    englishName: localSurah.name_en,
-    numberOfAyahs: localSurah.array.length,
-    revelationType: localSurah.type_en === "meccan" ? "Meccan" : "Medinan",
-    ayahs: localSurah.array.map((ayah) => ({
-      numberInSurah: ayah.id,
-      text: ayah.ar,
-      translation: ayah.en,
+    number: localSurah.number,
+    name: localSurah.name.ar,
+    englishName: localSurah.name.en || localSurah.name.transliteration || "",
+    numberOfAyahs: localSurah.verses_count,
+    revelationType: revelationType,
+    ayahs: localSurah.verses.map((ayah) => ({
+      numberInSurah: ayah.number,
+      text: ayah.text.ar,
+      translation: ayah.text.en,
+      page: ayah.page,
+      juz: ayah.juz,
     })),
   };
 };
@@ -89,7 +107,7 @@ const loadQuranData = async (): Promise<LocalSurah[]> => {
 
 const getSurahByNumber = async (number: number): Promise<ApiResponse> => {
   const quranData = await loadQuranData();
-  const surah = quranData.find((s: LocalSurah) => s.id === number);
+  const surah = quranData.find((s: LocalSurah) => s.number === number);
 
   if (!surah) {
     return Promise.reject(new Error(`السورة رقم ${number} غير موجودة`));
@@ -108,18 +126,20 @@ const getAyah = async (ayahNumber: number): Promise<any> => {
   const quranData = await loadQuranData();
   // البحث عن الآية في جميع السور
   for (const surah of quranData) {
-    const ayah = surah.array.find((a) => a.id === ayahNumber);
+    const ayah = surah.verses.find((a) => a.number === ayahNumber);
     if (ayah) {
       return Promise.resolve({
         data: {
           data: {
-            number: ayah.id,
-            text: ayah.ar,
-            translation: ayah.en,
+            number: ayah.number,
+            text: ayah.text.ar,
+            translation: ayah.text.en,
+            page: ayah.page,
+            juz: ayah.juz,
             surah: {
-              number: surah.id,
-              name: surah.name,
-              englishName: surah.name_en,
+              number: surah.number,
+              name: surah.name.ar,
+              englishName: surah.name.en || surah.name.transliteration || "",
             },
           },
         },
@@ -130,4 +150,113 @@ const getAyah = async (ayahNumber: number): Promise<any> => {
   return Promise.reject(new Error(`الآية رقم ${ayahNumber} غير موجودة`));
 };
 
-export { getAllQuran, getSurahByNumber, getAyah };
+// دالة للحصول على جميع الآيات من جميع السور مجمعة حسب الصفحات
+const getAllAyahsByPages = async (): Promise<Map<number, ApiAyah[]>> => {
+  const quranData = await loadQuranData();
+  const pagesMap = new Map<number, ApiAyah[]>();
+
+  quranData.forEach((surah) => {
+    surah.verses.forEach((ayah) => {
+      if (ayah.page) {
+        if (!pagesMap.has(ayah.page)) {
+          pagesMap.set(ayah.page, []);
+        }
+        const convertedAyah: ApiAyah = {
+          numberInSurah: ayah.number,
+          text: ayah.text.ar,
+          translation: ayah.text.en,
+          page: ayah.page,
+          juz: ayah.juz,
+        };
+        pagesMap.get(ayah.page)!.push(convertedAyah);
+      }
+    });
+  });
+
+  return pagesMap;
+};
+
+// دالة لإزالة التشكيل والمسافات الزائدة من النص العربي
+const removeDiacritics = (text: string): string => {
+  // إزالة جميع علامات التشكيل (diacritics) والمسافات الزائدة
+  return text
+    .replace(/[\u064B-\u065F\u0670]/g, "") // إزالة علامات التشكيل
+    .replace(/[\u06E1\u06E2]/g, "") // إزالة علامات إضافية
+    .replace(/[ًٌٍَُِّْٰ]/g, "") // إزالة علامات التشكيل الأساسية
+    .replace(/\s+/g, " ") // استبدال المسافات المتعددة بمسافة واحدة
+    .trim();
+};
+
+// دالة للبحث في الآيات مع تجاهل التشكيل
+const searchAyahs = async (
+  searchText: string
+): Promise<
+  Array<{
+    surahNumber: number;
+    surahName: string;
+    ayahNumber: number;
+    text: string;
+    translation?: string;
+  }>
+> => {
+  const quranData = await loadQuranData();
+  const results: Array<{
+    surahNumber: number;
+    surahName: string;
+    ayahNumber: number;
+    text: string;
+    translation?: string;
+  }> = [];
+
+  const searchLower = searchText.toLowerCase().trim();
+  if (!searchLower) return results;
+
+  // إزالة التشكيل والمسافات الزائدة من نص البحث
+  const searchWithoutDiacritics = removeDiacritics(searchLower);
+  // تقسيم نص البحث إلى كلمات للبحث المرن
+  const searchWords = searchWithoutDiacritics
+    .split(/\s+/)
+    .filter((w) => w.length > 0);
+
+  quranData.forEach((surah) => {
+    surah.verses.forEach((ayah) => {
+      // إزالة التشكيل من نص الآية
+      const ayahTextWithoutDiacritics = removeDiacritics(
+        ayah.text.ar.toLowerCase()
+      );
+      const ayahText = ayah.text.ar.toLowerCase();
+      const translationText = ayah.text.en?.toLowerCase() || "";
+
+      // البحث المرن: التحقق من وجود جميع كلمات البحث في الآية
+      const allWordsMatch = searchWords.every((word) =>
+        ayahTextWithoutDiacritics.includes(word)
+      );
+
+      // البحث في النص بدون تشكيل أو مع تشكيل أو في الترجمة
+      if (
+        allWordsMatch ||
+        ayahTextWithoutDiacritics.includes(searchWithoutDiacritics) ||
+        ayahText.includes(searchLower) ||
+        translationText.includes(searchLower)
+      ) {
+        results.push({
+          surahNumber: surah.number,
+          surahName: surah.name.ar,
+          ayahNumber: ayah.number,
+          text: ayah.text.ar,
+          translation: ayah.text.en,
+        });
+      }
+    });
+  });
+
+  return results;
+};
+
+export {
+  getAllQuran,
+  getSurahByNumber,
+  getAyah,
+  getAllAyahsByPages,
+  searchAyahs,
+};

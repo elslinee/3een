@@ -13,6 +13,7 @@ import { getColors } from "@/constants/Colors";
 import { FontFamily } from "@/constants/FontFamily";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { FontAwesome } from "@expo/vector-icons";
 import { router } from "expo-router";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
@@ -43,6 +44,8 @@ interface AyahModalProps {
   onRemoveFromFavorites?: () => void;
   showRemoveButton?: boolean;
   showGoToSurah?: boolean;
+  isBookmarked?: boolean;
+  onToggleBookmark?: () => void;
 }
 
 function AyahModal({
@@ -56,6 +59,8 @@ function AyahModal({
   onRemoveFromFavorites,
   showRemoveButton = false,
   showGoToSurah = false,
+  isBookmarked = false,
+  onToggleBookmark,
 }: AyahModalProps) {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
@@ -227,6 +232,7 @@ function AyahModal({
                 justifyContent: "center",
                 alignItems: "center",
                 gap: 10,
+                flexWrap: "wrap",
               }}
             >
               {/* Share Button */}
@@ -238,8 +244,8 @@ function AyahModal({
                   paddingHorizontal: 16,
                   paddingVertical: 10,
                   borderRadius: 20,
-                  width: "50%",
-
+                  flex: 1,
+                  minWidth: "30%",
                   justifyContent: "center",
                 }}
                 onPress={async () => {
@@ -247,7 +253,7 @@ function AyahModal({
                   onClose();
                 }}
               >
-                <FontAwesome5 name="share" size={13} color={color.white} />
+                <FontAwesome5 name="share-alt" size={13} color={color.white} />
                 <Text
                   style={{
                     color: color.white,
@@ -270,8 +276,8 @@ function AyahModal({
                     paddingHorizontal: 16,
                     paddingVertical: 10,
                     borderRadius: 20,
-                    width: "50%",
-
+                    flex: 1,
+                    minWidth: "30%",
                     justifyContent: "center",
                   }}
                   onPress={() => {
@@ -308,7 +314,8 @@ function AyahModal({
                     paddingHorizontal: 16,
                     paddingVertical: 10,
                     borderRadius: 20,
-                    width: "50%",
+                    flex: 1,
+                    minWidth: "30%",
                     marginHorizontal: 4,
                     justifyContent: "center",
                   }}
@@ -335,6 +342,49 @@ function AyahModal({
                     }}
                   >
                     {isFavorite ? "مفضلة" : "إضافة للمفضلة"}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {/* Bookmark Button */}
+              {onToggleBookmark && (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: isBookmarked
+                      ? color.primary
+                      : color.primary20,
+                    paddingHorizontal: 16,
+                    paddingVertical: 10,
+                    borderRadius: 20,
+                    flex: 1,
+                    minWidth: "30%",
+                    marginHorizontal: 4,
+                    justifyContent: "center",
+                  }}
+                  onPress={() => {
+                    if (onToggleBookmark) {
+                      onToggleBookmark();
+                    }
+                  }}
+                >
+                  <FontAwesome
+                    name={isBookmarked ? "bookmark" : "bookmark-o"}
+                    size={13}
+                    color={isBookmarked ? color.white : color.text}
+                  />
+                  <Text
+                    style={{
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      color: isBookmarked ? color.white : color.text,
+                      fontFamily: FontFamily.medium,
+                      marginLeft: 8,
+                      fontSize: 11,
+                    }}
+                  >
+                    {isBookmarked ? "إشارة مرجعية" : "إضافة إشارة"}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -384,7 +434,7 @@ function AyahModal({
           opacity: 0,
           pointerEvents: "none",
           backgroundColor: color.bg20,
-          borderRadius: 16,
+          // borderRadius: 16,
           paddingVertical: 24,
           paddingHorizontal: 20,
           minWidth: 300,
@@ -430,9 +480,9 @@ function AyahModal({
               }}
             >
               <AppLogo
-                size={60}
-                primaryColor={color.primary}
-                secondaryColor={color.primary}
+                size={32}
+                primaryColor={color.primary + "80"}
+                secondaryColor={color.primary + "80"}
                 backgroundColor="transparent"
               />
             </View>

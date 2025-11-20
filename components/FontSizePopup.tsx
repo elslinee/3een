@@ -25,7 +25,8 @@ export default function FontSizePopup({
 }: FontSizePopupProps) {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
-  const { fontSize, setFontSize, resetFontSize } = useFontSize();
+  const { fontSize, setFontSize, resetFontSize, isBold, toggleBold } =
+    useFontSize();
 
   const handleReset = () => {
     resetFontSize();
@@ -129,6 +130,31 @@ export default function FontSizePopup({
               </TouchableOpacity>
             </View>
 
+            {/* Bold Toggle */}
+            <View style={styles.boldContainer}>
+              <TouchableOpacity
+                style={[
+                  styles.boldButton,
+                  {
+                    backgroundColor: isBold ? color.primary : color.bg20,
+                  },
+                ]}
+                onPress={toggleBold}
+              >
+                <Text
+                  style={[
+                    styles.boldButtonText,
+                    {
+                      color: isBold ? color.white : color.text,
+                      fontFamily: FontFamily.medium,
+                    },
+                  ]}
+                >
+                  {isBold ? "غامق" : "عادي"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
             {/* Reset Button Only */}
             <View style={styles.actionsContainer}>
               <TouchableOpacity
@@ -226,6 +252,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     minWidth: 30,
     textAlign: "center",
+  },
+  boldContainer: {
+    marginBottom: 16,
+  },
+  boldButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  boldButtonText: {
+    fontSize: 14,
   },
   actionsContainer: {
     flexDirection: "row",

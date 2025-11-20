@@ -26,7 +26,7 @@ const InlineAyahView = forwardRef<InlineAyahViewHandle, InlineAyahViewProps>(
     { ayahs, bookmark, onAyahPress, onToggleBookmark, toArabicDigits, color },
     ref
   ) => {
-    const { fontSize } = useFontSize();
+    const { fontSize, isBold } = useFontSize();
 
     const [visibleCount, setVisibleCount] = useState(20);
 
@@ -43,7 +43,7 @@ const InlineAyahView = forwardRef<InlineAyahViewHandle, InlineAyahViewProps>(
     return (
       <Text
         style={[
-          styles.inlineText(fontSize, color.darkText),
+          styles.inlineText(fontSize, color.text, isBold),
           { paddingVertical: 20 },
         ]}
       >
@@ -81,12 +81,12 @@ const InlineAyahView = forwardRef<InlineAyahViewHandle, InlineAyahViewProps>(
 );
 
 const styles = {
-  inlineText: (fontSize: number, color: string) => ({
+  inlineText: (fontSize: number, color: string, isBold: boolean) => ({
     fontSize: fontSize,
-    fontFamily: FontFamily.quran,
+    fontFamily: isBold ? FontFamily.quranBold : FontFamily.quran,
     color: color,
     writingDirection: "rtl" as const,
-    lineHeight: fontSize * 1.7,
+    lineHeight: fontSize * 1.9,
   }),
   inlineAyahText: {
     backgroundColor: "transparent",

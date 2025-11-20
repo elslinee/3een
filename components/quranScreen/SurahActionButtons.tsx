@@ -83,8 +83,12 @@ export const SurahActionButtons: React.FC<SurahActionButtonsProps> = ({
           <TouchableOpacity
             style={[
               styles.actionButton,
-              { backgroundColor: btnsBackgroundColors },
+              {
+                opacity: isInlineMode ? 0.5 : 1,
+                backgroundColor: btnsBackgroundColors,
+              },
             ]}
+            disabled={isInlineMode}
             onPress={onGoToBookmark}
             onLongPress={() => showTooltip("الانتقال إلى الاية المحفوظة")}
           >

@@ -17,12 +17,12 @@ export const SurahHeader: React.FC<SurahHeaderProps> = ({
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.surahInfoContainer}>
-          <Text style={[styles.surahName, { color: color.darkText }]}>
+          <Text style={[styles.surahName, { color: color.text }]}>
             {surahData.name}
           </Text>
-          <Text style={[styles.surahEnglishName, { color: color.text20 }]}>
+          {/* <Text style={[styles.surahEnglishName, { color: color.text20 }]}>
             {surahData.englishName}
-          </Text>
+          </Text> */}
           <Text style={[styles.surahDetails, { color: color.text20 }]}>
             {toArabicDigits(surahData.numberOfAyahs)} آية •{" "}
             {surahData.revelationType === "Meccan" ? "مكية" : "مدنية"}
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 20,
+    paddingBottom: 4,
     borderBottomWidth: 0,
   },
   content: {
@@ -50,10 +51,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   surahName: {
-    fontSize: 22,
-    fontFamily: FontFamily.quranBold,
+    fontSize: 24,
+    fontFamily: FontFamily.bold,
     textAlign: "center",
-    marginBottom: 6,
+    marginBottom: 4,
   },
   surahEnglishName: {
     fontSize: 16,

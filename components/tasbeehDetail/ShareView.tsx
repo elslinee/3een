@@ -50,9 +50,9 @@ export const ShareView: React.FC<ShareViewProps> = ({
         }}
       >
         <AppLogo
-          size={60}
-          primaryColor={color.primary}
-          secondaryColor={completedColor}
+          size={32}
+          primaryColor={color.primary + "80"}
+          secondaryColor={completedColor + "80"}
           backgroundColor="transparent"
         />
       </View>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 18,
+    // borderRadius: 18,
     paddingVertical: 24,
     paddingHorizontal: 20,
   },

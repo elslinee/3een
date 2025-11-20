@@ -20,12 +20,40 @@ const PRAYER_ORDER: ScheduledPrayerKey[] = [
   "Isha",
 ];
 
-const PRAYER_TITLES: Record<ScheduledPrayerKey, string> = {
-  Fajr: "أذان صلاة الفجر",
-  Dhuhr: "أذان صلاة الظهر",
-  Asr: "أذان صلاة العصر",
-  Maghrib: "أذان صلاة المغرب",
-  Isha: "أذان صلاة العشاء",
+const getPrayerTitle = (key: ScheduledPrayerKey, isFriday: boolean): string => {
+  if (key === "Dhuhr" && isFriday) {
+    return "أذان صلاة الجمعة";
+  }
+
+  const titles: Record<ScheduledPrayerKey, string> = {
+    Fajr: "أذان صلاة الفجر",
+    Dhuhr: "أذان صلاة الظهر",
+    Asr: "أذان صلاة العصر",
+    Maghrib: "أذان صلاة المغرب",
+    Isha: "أذان صلاة العشاء",
+  };
+
+  return titles[key];
+};
+const PRAYER_MESSAGES = {
+  Fajr: "﴿فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ﴾",
+  Dhuhr: "﴿وَأَقِمِ الصَّلَاةَ لِذِكْرِي﴾",
+  Asr: "﴿حَافِظُوا عَلَى الصَّلَوَاتِ﴾",
+  Maghrib: "﴿قَدْ أَفْلَحَ الْمُؤْمِنُونَ﴾",
+  Isha: "﴿إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا﴾",
+};
+
+const FRIDAY_MESSAGE =
+  "﴿يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ﴾";
+
+const getPrayerMessage = (
+  key: ScheduledPrayerKey,
+  isFriday: boolean
+): string => {
+  if (key === "Dhuhr" && isFriday) {
+    return FRIDAY_MESSAGE;
+  }
+  return PRAYER_MESSAGES[key];
 };
 
 interface UsePrayerNotificationsOptions {
@@ -58,7 +86,7 @@ export default function usePrayerNotifications(
     const tz = prayerTimes.meta.timezone || "Africa/Cairo";
     const now = new Date();
 
-    type IdMap = Partial<Record<ScheduledPrayerKey, string>>;
+    type IdMap = Partial<Record<ScheduledPrayerKey | string, string>>;
     const IDS_KEY = "prayer_notification_ids_v1";
 
     const schedulePerPrayer = async () => {
@@ -92,6 +120,9 @@ export default function usePrayerNotifications(
       try {
         const todayInTZ = toZonedTime(now, tz);
         const yyyyMMdd = format(todayInTZ, "yyyy-MM-dd", { timeZone: tz });
+
+        // Check if today is Friday
+        const isFriday = todayInTZ.getDay() === 5;
 
         // Cancel ALL scheduled notifications first to prevent duplicates
         await Notifications.cancelAllScheduledNotificationsAsync();
@@ -130,25 +161,129 @@ export default function usePrayerNotifications(
             ? addDays(targetUtc, 1)
             : targetUtc;
 
-          const identifier = await Notifications.scheduleNotificationAsync({
-            content: {
-              title: titlePrefix
-                ? `${titlePrefix} ${PRAYER_TITLES[key]}`
-                : PRAYER_TITLES[key],
-              body: `حان الآن ${PRAYER_TITLES[key]}`,
-              sound: "default",
-              data: {
-                type: "prayer",
-                screen: "PrayerTimes",
+          const hour = targetInstant.getHours();
+          const minute = targetInstant.getMinutes();
+
+          // Special handling for Dhuhr prayer: create separate notifications for Friday and other days
+          if (key === "Dhuhr") {
+            // Schedule notification for Friday (WEEKLY with weekday 5 = Friday)
+            const fridayTitle = getPrayerTitle(key, true); // "أذان صلاة الجمعة"
+            const fridayNotificationTitle = titlePrefix
+              ? `${titlePrefix} حان وقت ${fridayTitle}`
+              : `حان وقت ${fridayTitle}`;
+            const fridayNotificationBody = getPrayerMessage(key, true);
+
+            console.log("Friday Prayer Notification:", {
+              prayer: key,
+              title: fridayNotificationTitle,
+              body: fridayNotificationBody,
+              weekday: 5,
+              hour,
+              minute,
+            });
+
+            const fridayIdentifier =
+              await Notifications.scheduleNotificationAsync({
+                content: {
+                  title: fridayNotificationTitle,
+                  body: fridayNotificationBody,
+                  sound: "default",
+                  data: {
+                    type: "prayer",
+                    screen: "PrayerTimes",
+                    isFriday: true,
+                  },
+                },
+                trigger: {
+                  type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+                  weekday: 5, // Friday
+                  hour: hour,
+                  minute: minute,
+                },
+              });
+            nextStored[`${key}_Friday`] = fridayIdentifier;
+
+            // Schedule notification for other days (WEEKLY with weekdays 0-4, 6 = Sunday-Thursday, Saturday)
+            const dhuhrTitle = getPrayerTitle(key, false); // "أذان صلاة الظهر"
+            const dhuhrNotificationTitle = titlePrefix
+              ? `${titlePrefix} حان وقت ${dhuhrTitle}`
+              : `حان وقت ${dhuhrTitle}`;
+            const dhuhrNotificationBody = PRAYER_MESSAGES[key];
+
+            console.log("Dhuhr Prayer Notification:", {
+              prayer: key,
+              title: dhuhrNotificationTitle,
+              body: dhuhrNotificationBody,
+              weekdays: [0, 1, 2, 3, 4, 6],
+              hour,
+              minute,
+            });
+
+            // Schedule for each weekday separately (expo-notifications doesn't support multiple weekdays in one trigger)
+            const weekdays = [0, 1, 2, 3, 4, 6]; // Sunday, Monday, Tuesday, Wednesday, Thursday, Saturday
+            const weekdayIdentifiers: string[] = [];
+
+            for (const weekday of weekdays) {
+              const weekdayIdentifier =
+                await Notifications.scheduleNotificationAsync({
+                  content: {
+                    title: dhuhrNotificationTitle,
+                    body: dhuhrNotificationBody,
+                    sound: "default",
+                    data: {
+                      type: "prayer",
+                      screen: "PrayerTimes",
+                      isFriday: false,
+                    },
+                  },
+                  trigger: {
+                    type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
+                    weekday: weekday,
+                    hour: hour,
+                    minute: minute,
+                  },
+                });
+              weekdayIdentifiers.push(weekdayIdentifier);
+            }
+
+            // Store all identifiers
+            nextStored[key] = JSON.stringify({
+              friday: fridayIdentifier,
+              weekdays: weekdayIdentifiers,
+            }) as any;
+          } else {
+            // For other prayers, use daily notification
+            const prayerTitle = getPrayerTitle(key, false);
+            const notificationTitle = titlePrefix
+              ? `${titlePrefix} حان وقت ${prayerTitle}`
+              : `حان وقت ${prayerTitle}`;
+            const notificationBody = PRAYER_MESSAGES[key];
+
+            console.log("Prayer Notification:", {
+              prayer: key,
+              title: notificationTitle,
+              body: notificationBody,
+              scheduledTime: targetInstant.toLocaleString("en-US"),
+            });
+
+            const identifier = await Notifications.scheduleNotificationAsync({
+              content: {
+                title: notificationTitle,
+                body: notificationBody,
+                sound: "default",
+                data: {
+                  type: "prayer",
+                  screen: "PrayerTimes",
+                },
               },
-            },
-            trigger: {
-              type: Notifications.SchedulableTriggerInputTypes.DAILY,
-              hour: targetInstant.getHours(),
-              minute: targetInstant.getMinutes(),
-            },
-          });
-          nextStored[key] = identifier;
+              trigger: {
+                type: Notifications.SchedulableTriggerInputTypes.DAILY,
+                hour: hour,
+                minute: minute,
+              },
+            });
+            nextStored[key] = identifier;
+          }
         }
 
         // Persist latest identifiers map

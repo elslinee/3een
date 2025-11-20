@@ -59,7 +59,6 @@ export default function Settings() {
             onPress={() => navigateToPage("/about")}
             color={color}
             showBorder={false}
-            
           />
         </SettingCard>
       </SettingSection>

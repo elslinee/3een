@@ -2,6 +2,8 @@ export interface Ayah {
   numberInSurah: number;
   text: string;
   translation?: string;
+  page?: number;
+  juz?: number;
 }
 
 export interface SurahData {

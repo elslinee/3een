@@ -35,4 +35,3 @@ export const useViewMode = () => {
 
   return { isInlineMode, isSwitchingView, toggleViewMode };
 };
-

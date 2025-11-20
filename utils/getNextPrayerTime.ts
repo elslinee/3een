@@ -21,9 +21,12 @@ const getNextPrayerTime = (
   const now = new Date();
   const currentTime = now.getHours() * 60 + now.getMinutes(); // Convert to minutes
 
+  // Check if today is Friday
+  const isFriday = now.getDay() === 5;
+
   const prayers = [
     { name: "الفجر", time: prayerTimes.Fajr },
-    { name: "الظهر", time: prayerTimes.Dhuhr },
+    { name: isFriday ? "الجمعة" : "الظهر", time: prayerTimes.Dhuhr },
     { name: "العصر", time: prayerTimes.Asr },
     { name: "المغرب", time: prayerTimes.Maghrib },
     { name: "العشاء", time: prayerTimes.Isha },

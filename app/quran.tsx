@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { getColors } from "@/constants/Colors";
@@ -20,6 +21,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import GoBack from "@/components/GoBack";
 import { Ionicons } from "@expo/vector-icons";
+import { searchAyahs } from "@/utils/QuranApis";
 
 const { width } = Dimensions.get("window");
 const isSmallScreen = width < 380;
@@ -186,6 +188,17 @@ export default function QuranScreen() {
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [pinnedSurahs, setPinnedSurahs] = useState<number[]>([]);
+  const [searchMode, setSearchMode] = useState<"surahs" | "ayahs">("surahs");
+  const [ayahSearchResults, setAyahSearchResults] = useState<
+    Array<{
+      surahNumber: number;
+      surahName: string;
+      ayahNumber: number;
+      text: string;
+      translation?: string;
+    }>
+  >([]);
+  const [isSearchingAyahs, setIsSearchingAyahs] = useState(false);
 
   useEffect(() => {
     // Simulate loading time for better UX
@@ -224,6 +237,32 @@ export default function QuranScreen() {
       // ignore
     }
   };
+  // Search in ayahs when search mode is ayahs
+  useEffect(() => {
+    if (searchMode === "ayahs" && searchText.trim().length > 0) {
+      setIsSearchingAyahs(true);
+      const timeoutId = setTimeout(async () => {
+        try {
+          const results = await searchAyahs(searchText);
+          setAyahSearchResults(results);
+        } catch (error) {
+          console.error("Error searching ayahs:", error);
+          setAyahSearchResults([]);
+        } finally {
+          setIsSearchingAyahs(false);
+        }
+      }, 300); // Debounce search
+
+      return () => {
+        clearTimeout(timeoutId);
+        setIsSearchingAyahs(false);
+      };
+    } else {
+      setAyahSearchResults([]);
+      setIsSearchingAyahs(false);
+    }
+  }, [searchText, searchMode]);
+
   // Filter surahs based on search text
   const filteredSurahs = surahsData.filter((surah) =>
     surah.name.toLowerCase().includes(searchText.toLowerCase())
@@ -283,7 +322,7 @@ export default function QuranScreen() {
       </View>
 
       <View style={styles.surahInfo}>
-        <Text style={[styles.surahName, { color: color.darkText }]}>
+        <Text style={[styles.surahName, { color: color.text }]}>
           {item.name}
         </Text>
         <Text style={[styles.surahDetails, { color: color.darkText }]}>
@@ -354,33 +393,19 @@ export default function QuranScreen() {
           سور القرآن الكريم
         </Text>
         <Text style={[styles.headerSubtitle, { color: color.darkText }]}>
-          {searchText
-            ? `${filteredSurahs.length} من ${surahsData.length} سورة`
-            : `${surahsData.length} سورة`}
+          {searchMode === "ayahs" && searchText
+            ? `${ayahSearchResults.length} آية`
+            : searchText
+              ? `${filteredSurahs.length} من ${surahsData.length} سورة`
+              : `${surahsData.length} سورة`}
         </Text>
 
-        {/* Favorites Button */}
-        <TouchableOpacity
-          style={{
-            position: "absolute",
-            right: 20,
-            top: 20,
-            padding: 12,
-            borderRadius: 8,
-            backgroundColor: `${color.text20}22`,
-          }}
-          onPress={() => router.push("/favorites")}
-        >
-          <FontAwesome5 name="heart" size={20} color={color.primary} />
-        </TouchableOpacity>
         <View
           style={{
             display: "flex",
             flexDirection: "row",
-
             marginTop: 10,
             justifyContent: "center",
-            gap: 10,
           }}
         >
           <View
@@ -388,14 +413,18 @@ export default function QuranScreen() {
               styles.searchContainer,
               {
                 backgroundColor: `${color.text20}22`,
-
                 borderWidth: 0,
                 flex: 1,
               },
             ]}
           >
-            <EvilIcons name="search" size={28} color={ searchText.length > 0 ? color.primary : color.text20} />
+            <EvilIcons
+              name="search"
+              size={28}
+              color={searchText.length > 0 ? color.primary : color.text20}
+            />
             <TextInput
+              key={searchMode}
               style={[
                 styles.searchInput,
                 {
@@ -403,43 +432,155 @@ export default function QuranScreen() {
                 },
               ]}
               selectionColor={color.primary}
-              placeholder="البحث في السور..."
+              placeholder={
+                searchMode === "surahs"
+                  ? "البحث في السور..."
+                  : "البحث في الآيات..."
+              }
               placeholderTextColor={color.text20}
               value={searchText}
               onChangeText={setSearchText}
             />
+            <TouchableOpacity
+              onPress={() => {
+                setSearchMode(searchMode === "surahs" ? "ayahs" : "surahs");
+              }}
+              style={styles.searchModeButton}
+            >
+              <Text
+                style={[
+                  styles.searchModeText,
+                  {
+                    color:
+                      searchMode === "ayahs" ? color.primary : color.primary,
+                    fontFamily: FontFamily.bold,
+                  },
+                ]}
+              >
+                {searchMode === "surahs" ? "آيات" : "سور"}
+              </Text>
+            </TouchableOpacity>
             {searchText.length > 0 && (
               <TouchableOpacity
                 onPress={() => setSearchText("")}
                 style={styles.clearButton}
               >
-                <FontAwesome5 name="times" size={14} color={color.text} />
+                <FontAwesome5 name="times" size={15} color={color.text20} />
               </TouchableOpacity>
             )}
           </View>
-          <TouchableOpacity
-            style={[
-              styles.sortButton,
-              {
-                backgroundColor: "transparent",
-                height: 50,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              },
-            ]}
-            onPress={() => setIsReversed(!isReversed)}
-          >
-            <FontAwesome5
-              name={isReversed ? "sort-amount-up" : "sort-amount-down"}
-              size={25}
-              color={color.primary}
-            />
-          </TouchableOpacity>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            paddingTop: 16,
+          }}
+        >
+          <View style={styles.actionBtns}>
+            {/* Favorites Button */}
+            <TouchableOpacity
+              style={[
+                styles.actionBtn,
+                { backgroundColor: `${color.text20}22` },
+              ]}
+              onPress={() => router.push("/favorites")}
+            >
+              <FontAwesome5 name="heart" size={20} color={color.primary} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.actionBtn,
+                { backgroundColor: `${color.text20}22` },
+              ]}
+              onPress={() => setIsReversed(!isReversed)}
+            >
+              <FontAwesome5
+                name={isReversed ? "sort-amount-up" : "sort-amount-down"}
+                size={20}
+                color={color.primary}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-
-      {filteredSurahs.length === 0 && searchText ? (
+      {searchMode === "ayahs" && searchText ? (
+        isSearchingAyahs ? (
+          <View style={styles.noResultsContainer}>
+            <ActivityIndicator size="large" color={color.primary} />
+            <Text style={[styles.noResultsText, { color: color.darkText }]}>
+              جاري البحث...
+            </Text>
+          </View>
+        ) : ayahSearchResults.length === 0 ? (
+          <View style={styles.noResultsContainer}>
+            <EvilIcons
+              name="search"
+              size={78}
+              color={color.text20}
+              style={{ opacity: 0.5 }}
+            />
+            <Text style={[styles.noResultsText, { color: color.darkText }]}>
+              لم يتم العثور على نتائج
+            </Text>
+            <Text style={[styles.noResultsSubtext, { color: color.darkText }]}>
+              جرب البحث بكلمات مختلفة
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={ayahSearchResults}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={[
+                  styles.ayahResultItem,
+                  {
+                    backgroundColor: color.bg20,
+                    borderColor: color.border,
+                  },
+                ]}
+                onPress={() => {
+                  router.push(`/quran/${item.surahNumber}` as any);
+                }}
+              >
+                <View style={styles.ayahResultHeader}>
+                  <Text
+                    style={[styles.ayahResultSurah, { color: color.primary }]}
+                  >
+                    {item.surahName}
+                  </Text>
+                  <Text
+                    style={[styles.ayahResultNumber, { color: color.text20 }]}
+                  >
+                    آية {item.ayahNumber}
+                  </Text>
+                </View>
+                <Text
+                  style={[styles.ayahResultText, { color: color.text }]}
+                  numberOfLines={3}
+                >
+                  {item.text}
+                </Text>
+                {item.translation && (
+                  <Text
+                    style={[
+                      styles.ayahResultTranslation,
+                      { color: color.text20 },
+                    ]}
+                    numberOfLines={2}
+                  >
+                    {item.translation}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item, index) =>
+              `${item.surahNumber}-${item.ayahNumber}-${index}`
+            }
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.listContainer}
+          />
+        )
+      ) : filteredSurahs.length === 0 && searchText ? (
         <View style={styles.noResultsContainer}>
           <EvilIcons
             name="search"
@@ -536,7 +677,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
-    borderRadius: 8,
+    borderRadius: 16,
 
     height: 50,
   },
@@ -551,6 +692,7 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     padding: 8,
+
     marginLeft: 8,
   },
   sortButton: {
@@ -647,5 +789,61 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginHorizontal: 0,
     borderRadius: 1,
+  },
+  actionBtns: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    gap: 10,
+    alignItems: "center",
+  },
+  actionBtn: {
+    borderRadius: 8,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  searchModeButton: {
+    paddingHorizontal: 4,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  searchModeText: {
+    fontSize: 13,
+  },
+  ayahResultItem: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    borderWidth: 0,
+  },
+  ayahResultHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  ayahResultSurah: {
+    fontSize: 14,
+    fontFamily: FontFamily.bold,
+  },
+  ayahResultNumber: {
+    fontSize: 12,
+    fontFamily: FontFamily.regular,
+  },
+  ayahResultText: {
+    fontSize: 16,
+    fontFamily: FontFamily.quran,
+    textAlign: "right",
+    lineHeight: 28,
+    marginBottom: 8,
+  },
+  ayahResultTranslation: {
+    fontSize: 13,
+    fontFamily: FontFamily.regular,
+    textAlign: "right",
+    lineHeight: 20,
+    fontStyle: "italic",
   },
 });
