@@ -1,4 +1,4 @@
-export const APP_VERSION = "1.0.0";
+export const APP_VERSION = "1.1.0";
 export const APP_NAME = "عين";
 export const APP_AUTHOR = "Elsline";
 export const APP_AUTHOR_EMAIL = "info@elsline.com";
