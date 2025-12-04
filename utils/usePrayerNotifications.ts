@@ -3,7 +3,6 @@ import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Notifications from "expo-notifications";
 import { toZonedTime, format } from "date-fns-tz";
-import { addDays, isBefore } from "date-fns";
 import usePushNotifications from "@/utils/usePushNotifications";
 import type { PrayerTimesData } from "@/utils/prayerTimesService";
 
@@ -110,8 +109,17 @@ export default function usePrayerNotifications(
         lastIncludeRef.current === currentInclude &&
         lastTimingsRef.current === currentTimings
       ) {
+        console.log("[Notifications] Skipping - no changes detected");
         return;
       }
+
+      console.log(
+        "[Notifications] Scheduling notifications - changes detected",
+        {
+          includeChanged: lastIncludeRef.current !== currentInclude,
+          timingsChanged: lastTimingsRef.current !== currentTimings,
+        }
+      );
 
       isSchedulingRef.current = true;
       lastIncludeRef.current = currentInclude;
@@ -121,8 +129,15 @@ export default function usePrayerNotifications(
         const todayInTZ = toZonedTime(now, tz);
         const yyyyMMdd = format(todayInTZ, "yyyy-MM-dd", { timeZone: tz });
 
-        // Check if today is Friday
+        // Check if today is Friday (JavaScript uses 0=Sunday, 5=Friday)
         const isFriday = todayInTZ.getDay() === 5;
+
+        // Get all scheduled notifications before canceling (for debugging)
+        const existingNotifications =
+          await Notifications.getAllScheduledNotificationsAsync();
+        console.log(
+          `[Notifications] Existing scheduled: ${existingNotifications.length}`
+        );
 
         // Cancel ALL scheduled notifications first to prevent duplicates
         await Notifications.cancelAllScheduledNotificationsAsync();
@@ -155,14 +170,16 @@ export default function usePrayerNotifications(
             continue;
           }
 
-          const targetLocalString = `${yyyyMMdd}T${hhmm}:00`;
-          const targetUtc = toZonedTime(targetLocalString, tz);
-          const targetInstant = isBefore(targetUtc, now)
-            ? addDays(targetUtc, 1)
-            : targetUtc;
+          // For DAILY/WEEKLY triggers, we only need hour and minute (not dates)
+          // Parse directly from the API time string (format: "HH:MM")
+          const [hourStr, minuteStr] = hhmm.split(":");
+          const hour = parseInt(hourStr, 10);
+          const minute = parseInt(minuteStr, 10);
 
-          const hour = targetInstant.getHours();
-          const minute = targetInstant.getMinutes();
+          if (isNaN(hour) || isNaN(minute)) {
+            console.warn(`Invalid time format for ${key}: ${hhmm}`);
+            continue;
+          }
 
           // Special handling for Dhuhr prayer: create separate notifications for Friday and other days
           if (key === "Dhuhr") {
@@ -196,7 +213,7 @@ export default function usePrayerNotifications(
                 },
                 trigger: {
                   type: Notifications.SchedulableTriggerInputTypes.WEEKLY,
-                  weekday: 5, // Friday
+                  weekday: 6, // Friday (expo-notifications uses 1=Sunday, 6=Friday, 7=Saturday)
                   hour: hour,
                   minute: minute,
                 },
@@ -220,7 +237,9 @@ export default function usePrayerNotifications(
             });
 
             // Schedule for each weekday separately (expo-notifications doesn't support multiple weekdays in one trigger)
-            const weekdays = [0, 1, 2, 3, 4, 6]; // Sunday, Monday, Tuesday, Wednesday, Thursday, Saturday
+            // expo-notifications uses 1=Sunday, 2=Monday, ..., 6=Friday, 7=Saturday
+            // We want Sunday, Monday, Tuesday, Wednesday, Thursday, Saturday (all days except Friday)
+            const weekdays = [1, 2, 3, 4, 5, 7]; // Sun, Mon, Tue, Wed, Thu, Sat (expo indexing)
             const weekdayIdentifiers: string[] = [];
 
             for (const weekday of weekdays) {
@@ -263,7 +282,8 @@ export default function usePrayerNotifications(
               prayer: key,
               title: notificationTitle,
               body: notificationBody,
-              scheduledTime: targetInstant.toLocaleString("en-US"),
+              hour: hour,
+              minute: minute,
             });
 
             const identifier = await Notifications.scheduleNotificationAsync({
@@ -290,6 +310,19 @@ export default function usePrayerNotifications(
         try {
           await AsyncStorage.setItem(IDS_KEY, JSON.stringify(nextStored));
         } catch {}
+
+        // Verify what was scheduled
+        const scheduledNotifications =
+          await Notifications.getAllScheduledNotificationsAsync();
+        console.log(
+          `[Notifications] Successfully scheduled ${scheduledNotifications.length} notifications:`
+        );
+        scheduledNotifications.forEach((n) => {
+          const trigger = n.trigger as any;
+          console.log(
+            `  - ${n.content.title} (${trigger.type}${trigger.weekday ? `, weekday: ${trigger.weekday}` : ""}, ${trigger.hour}:${String(trigger.minute).padStart(2, "0")})`
+          );
+        });
       } catch (err) {
         console.error("Failed scheduling prayer notifications:", err);
       } finally {
@@ -305,5 +338,7 @@ export default function usePrayerNotifications(
         Notifications.cancelAllScheduledNotificationsAsync().catch(() => {});
       }
     };
+    // Note: `include` object reference changes on every render, but we use JSON.stringify
+    // internally (lines 98-105) to detect actual value changes, so duplicates are prevented
   }, [enabled, prayerTimes, include]);
 }

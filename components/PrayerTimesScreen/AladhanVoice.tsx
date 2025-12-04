@@ -20,8 +20,8 @@ export default function AladhanVoice({ color }: { color: any }) {
   // Stable keys to map times and toggles
   const PRAYER_KEYS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"] as const;
 
-  // Check if today is Friday
-  const isFriday = new Date().getDay() === 5;
+  // Make isFriday reactive - update when day changes
+  const [isFriday, setIsFriday] = useState(() => new Date().getDay() === 5);
 
   const [prayers, setPrayers] = useState([
     {
@@ -116,6 +116,24 @@ export default function AladhanVoice({ color }: { color: any }) {
       );
     }
   }, [prayerTimes?.timings, isFriday]);
+
+  // Update isFriday when prayer times update (in case day changed)
+  useEffect(() => {
+    if (prayerTimes?.date?.gregorian?.date) {
+      // Prayer times include the date, use it to determine if it's Friday
+      const dateStr = prayerTimes.date.gregorian.date;
+      const [day, month, year] = dateStr.split("-");
+      const prayerDate = new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day)
+      );
+      const newIsFriday = prayerDate.getDay() === 5;
+      if (newIsFriday !== isFriday) {
+        setIsFriday(newIsFriday);
+      }
+    }
+  }, [prayerTimes?.date?.gregorian?.date, isFriday]);
 
   // Map UI toggles to hook include map per prayer
   const includeMap = useMemo(() => {
