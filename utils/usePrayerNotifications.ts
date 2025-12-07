@@ -21,29 +21,30 @@ const PRAYER_ORDER: ScheduledPrayerKey[] = [
 
 const getPrayerTitle = (key: ScheduledPrayerKey, isFriday: boolean): string => {
   if (key === "Dhuhr" && isFriday) {
-    return "أذان صلاة الجمعة";
+    return "صلاة الجمعة";
   }
 
   const titles: Record<ScheduledPrayerKey, string> = {
-    Fajr: "أذان صلاة الفجر",
-    Dhuhr: "أذان صلاة الظهر",
-    Asr: "أذان صلاة العصر",
-    Maghrib: "أذان صلاة المغرب",
-    Isha: "أذان صلاة العشاء",
+    Fajr: "صلاة الفجر",
+    Dhuhr: "صلاة الظهر",
+    Asr: "صلاة العصر",
+    Maghrib: "صلاة المغرب",
+    Isha: "صلاة العشاء",
   };
 
   return titles[key];
 };
+
 const PRAYER_MESSAGES = {
-  Fajr: "﴿فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ﴾",
-  Dhuhr: "﴿وَأَقِمِ الصَّلَاةَ لِذِكْرِي﴾",
-  Asr: "﴿حَافِظُوا عَلَى الصَّلَوَاتِ﴾",
-  Maghrib: "﴿قَدْ أَفْلَحَ الْمُؤْمِنُونَ﴾",
-  Isha: "﴿إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا﴾",
+  Fajr: "من صلى الفجر في جماعة فكأنما قام الليل كله",
+  Dhuhr: "من حافظ على أربع ركعات قبل الظهر وأربع بعدها حرّمه الله على النار",
+  Asr: "من فاتته صلاةُ العصر فكأنما وُتِرَ أهلُه ومالُه",
+  Maghrib: "من صلى المغرب في جماعة فكأنما قام نصف الليل",
+  Isha: "من صلى العشاء في جماعة فكأنما قام نصف الليل",
 };
 
 const FRIDAY_MESSAGE =
-  "﴿يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ﴾";
+  "﴿يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ وَذَرُوا الْبَيْعَ ذَٰلِكُمْ خَيْرٌ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ﴾";
 
 const getPrayerMessage = (
   key: ScheduledPrayerKey,
@@ -75,18 +76,28 @@ export default function usePrayerNotifications(
   const lastIncludeRef = useRef<string>("");
   const lastTimingsRef = useRef<string>("");
   const isSchedulingRef = useRef(false);
+  const hasInitializedRef = useRef(false);
   const { enabled = true, include = {}, titlePrefix } = options;
 
+  // Cancel all old notifications on first mount to ensure clean state
   useEffect(() => {
-    if (!enabled || !prayerTimes?.timings || !prayerTimes?.meta?.timezone) {
+    if (!hasInitializedRef.current) {
+      hasInitializedRef.current = true;
+      Notifications.cancelAllScheduledNotificationsAsync().catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) {
       return;
     }
 
-    const tz = prayerTimes.meta.timezone || "Africa/Cairo";
     const now = new Date();
 
     type IdMap = Partial<Record<ScheduledPrayerKey | string, string>>;
     const IDS_KEY = "prayer_notification_ids_v1";
+    const CACHED_TIMINGS_KEY = "cached_prayer_timings_v1";
+    const LAST_SCHEDULED_DATE_KEY = "last_scheduled_date_v1";
 
     const schedulePerPrayer = async () => {
       // Prevent concurrent executions
@@ -94,15 +105,83 @@ export default function usePrayerNotifications(
         return;
       }
 
+      // Try to get prayer times from API, fallback to cached if not available
+      let timingsToUse: Record<ScheduledPrayerKey, string> | null = null;
+      let timezoneToUse: string = "Africa/Cairo";
+
+      if (prayerTimes?.timings && prayerTimes?.meta?.timezone) {
+        // Use API data if available
+        timingsToUse = {
+          Fajr: prayerTimes.timings.Fajr,
+          Dhuhr: prayerTimes.timings.Dhuhr,
+          Asr: prayerTimes.timings.Asr,
+          Maghrib: prayerTimes.timings.Maghrib,
+          Isha: prayerTimes.timings.Isha,
+        };
+        timezoneToUse = prayerTimes.meta.timezone;
+
+        // Save to cache for offline use
+        try {
+          await AsyncStorage.setItem(
+            CACHED_TIMINGS_KEY,
+            JSON.stringify({
+              timings: timingsToUse,
+              timezone: timezoneToUse,
+              date: format(now, "yyyy-MM-dd"),
+            })
+          );
+        } catch {}
+      } else {
+        // Try to load from cache if API data not available
+        try {
+          const cached = await AsyncStorage.getItem(CACHED_TIMINGS_KEY);
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            const cachedDate = parsed.date;
+            const today = format(now, "yyyy-MM-dd");
+
+            // Only use cache if it's from today
+            if (cachedDate === today && parsed.timings) {
+              timingsToUse = parsed.timings;
+              timezoneToUse = parsed.timezone || "Africa/Cairo";
+              console.log(
+                "[Notifications] Using cached prayer times (offline mode)"
+              );
+            }
+          }
+        } catch {}
+      }
+
+      // If no timings available at all, skip scheduling
+      if (!timingsToUse) {
+        console.log("[Notifications] No prayer times available (API or cache)");
+        return;
+      }
+
+      const tz = timezoneToUse;
+
+      // Check if we already scheduled notifications for today
+      try {
+        const lastScheduledDate = await AsyncStorage.getItem(
+          LAST_SCHEDULED_DATE_KEY
+        );
+        const today = format(now, "yyyy-MM-dd");
+
+        if (lastScheduledDate === today) {
+          // Check if include map changed
+          const currentInclude = JSON.stringify(include);
+          if (lastIncludeRef.current === currentInclude) {
+            console.log(
+              "[Notifications] Already scheduled for today, skipping"
+            );
+            return;
+          }
+        }
+      } catch {}
+
       // Check if include map or timings have changed
       const currentInclude = JSON.stringify(include);
-      const currentTimings = JSON.stringify({
-        Fajr: prayerTimes.timings.Fajr,
-        Dhuhr: prayerTimes.timings.Dhuhr,
-        Asr: prayerTimes.timings.Asr,
-        Maghrib: prayerTimes.timings.Maghrib,
-        Isha: prayerTimes.timings.Isha,
-      });
+      const currentTimings = JSON.stringify(timingsToUse);
 
       // Only skip if both include map AND timings haven't changed
       if (
@@ -118,6 +197,7 @@ export default function usePrayerNotifications(
         {
           includeChanged: lastIncludeRef.current !== currentInclude,
           timingsChanged: lastTimingsRef.current !== currentTimings,
+          usingCache: !prayerTimes?.timings,
         }
       );
 
@@ -157,6 +237,12 @@ export default function usePrayerNotifications(
 
         const nextStored: IdMap = {};
 
+        // Mark that we scheduled for today
+        try {
+          const today = format(now, "yyyy-MM-dd");
+          await AsyncStorage.setItem(LAST_SCHEDULED_DATE_KEY, today);
+        } catch {}
+
         for (const key of PRAYER_ORDER) {
           const included = include[key] === true; // Only schedule if explicitly true
 
@@ -165,7 +251,7 @@ export default function usePrayerNotifications(
             continue;
           }
 
-          const hhmm = prayerTimes.timings[key];
+          const hhmm = timingsToUse[key];
           if (!hhmm) {
             continue;
           }
@@ -181,13 +267,17 @@ export default function usePrayerNotifications(
             continue;
           }
 
+          // Note: DAILY and WEEKLY triggers will automatically work for future days,
+          // so we don't need to check if the time has passed today.
+          // The system will schedule them for the next occurrence automatically.
+
           // Special handling for Dhuhr prayer: create separate notifications for Friday and other days
           if (key === "Dhuhr") {
             // Schedule notification for Friday (WEEKLY with weekday 5 = Friday)
-            const fridayTitle = getPrayerTitle(key, true); // "أذان صلاة الجمعة"
+            const fridayTitle = getPrayerTitle(key, true); // "صلاة الجمعة"
             const fridayNotificationTitle = titlePrefix
-              ? `${titlePrefix} حان وقت ${fridayTitle}`
-              : `حان وقت ${fridayTitle}`;
+              ? `${titlePrefix} موعد ${fridayTitle}`
+              : `موعد ${fridayTitle}`;
             const fridayNotificationBody = getPrayerMessage(key, true);
 
             console.log("Friday Prayer Notification:", {
@@ -221,10 +311,10 @@ export default function usePrayerNotifications(
             nextStored[`${key}_Friday`] = fridayIdentifier;
 
             // Schedule notification for other days (WEEKLY with weekdays 0-4, 6 = Sunday-Thursday, Saturday)
-            const dhuhrTitle = getPrayerTitle(key, false); // "أذان صلاة الظهر"
+            const dhuhrTitle = getPrayerTitle(key, false); // "صلاة الظهر"
             const dhuhrNotificationTitle = titlePrefix
-              ? `${titlePrefix} حان وقت ${dhuhrTitle}`
-              : `حان وقت ${dhuhrTitle}`;
+              ? `${titlePrefix} موعد ${dhuhrTitle}`
+              : `موعد ${dhuhrTitle}`;
             const dhuhrNotificationBody = PRAYER_MESSAGES[key];
 
             console.log("Dhuhr Prayer Notification:", {
@@ -274,8 +364,8 @@ export default function usePrayerNotifications(
             // For other prayers, use daily notification
             const prayerTitle = getPrayerTitle(key, false);
             const notificationTitle = titlePrefix
-              ? `${titlePrefix} حان وقت ${prayerTitle}`
-              : `حان وقت ${prayerTitle}`;
+              ? `${titlePrefix} موعد ${prayerTitle}`
+              : `موعد ${prayerTitle}`;
             const notificationBody = PRAYER_MESSAGES[key];
 
             console.log("Prayer Notification:", {

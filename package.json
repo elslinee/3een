@@ -19,7 +19,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "update:preview": "eas update --branch preview --message --platform android",
-    "update:production": "eas update --branch production --message --platform android"
+    "update:production": "eas update --branch production --message --platform android",
+    "compress:json": "node compress-json.js"
   },
   "jest": {
     "preset": "jest-expo"

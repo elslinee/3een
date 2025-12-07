@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,9 @@ import {
   TextInput,
   Dimensions,
   ActivityIndicator,
+  Modal,
+  Share,
+  Pressable,
 } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { getColors } from "@/constants/Colors";
@@ -15,6 +18,7 @@ import { FontFamily } from "@/constants/FontFamily";
 import { useRouter } from "expo-router";
 import { QuranIcon } from "@/constants/Icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -22,6 +26,10 @@ import EvilIcons from "@expo/vector-icons/EvilIcons";
 import GoBack from "@/components/GoBack";
 import { Ionicons } from "@expo/vector-icons";
 import { searchAyahs } from "@/utils/QuranApis";
+import { captureRef } from "react-native-view-shot";
+import * as Sharing from "expo-sharing";
+import * as FileSystem from "expo-file-system";
+import AppLogo from "@/components/AppLogo";
 
 const { width } = Dimensions.get("window");
 const isSmallScreen = width < 380;
@@ -199,6 +207,159 @@ export default function QuranScreen() {
     }>
   >([]);
   const [isSearchingAyahs, setIsSearchingAyahs] = useState(false);
+  const [selectedAyah, setSelectedAyah] = useState<{
+    surahNumber: number;
+    surahName: string;
+    ayahNumber: number;
+    text: string;
+    translation?: string;
+  } | null>(null);
+  const [showAyahModal, setShowAyahModal] = useState(false);
+  const [favoriteAyahs, setFavoriteAyahs] = useState<
+    Array<{ surahNumber: number; ayahNumber: number }>
+  >([]);
+  const ayahShareViewRef = useRef<View>(null);
+
+  useEffect(() => {
+    loadFavoriteAyahs();
+  }, []);
+
+  const loadFavoriteAyahs = async () => {
+    try {
+      const detailedFavorites = await AsyncStorage.getItem(
+        "quran_favorites_detailed"
+      );
+      if (detailedFavorites) {
+        const detailedData = JSON.parse(detailedFavorites);
+        const favorites = detailedData.map((item: any) => ({
+          surahNumber: item.surahNumber,
+          ayahNumber: item.ayahNumber,
+        }));
+        setFavoriteAyahs(favorites);
+      }
+    } catch (error) {
+      console.error("Error loading favorites:", error);
+    }
+  };
+
+  const isAyahFavorite = (surahNumber: number, ayahNumber: number) => {
+    return favoriteAyahs.some(
+      (fav) => fav.surahNumber === surahNumber && fav.ayahNumber === ayahNumber
+    );
+  };
+
+  const toggleFavorite = async (
+    surahNumber: number,
+    surahName: string,
+    ayahNumber: number,
+    ayahText: string
+  ) => {
+    try {
+      const isFavorite = isAyahFavorite(surahNumber, ayahNumber);
+      const detailedFavorites = await AsyncStorage.getItem(
+        "quran_favorites_detailed"
+      );
+      let detailedData = detailedFavorites ? JSON.parse(detailedFavorites) : [];
+
+      if (isFavorite) {
+        // Remove from favorites
+        detailedData = detailedData.filter(
+          (item: any) =>
+            !(
+              item.ayahNumber === ayahNumber && item.surahNumber === surahNumber
+            )
+        );
+      } else {
+        // Add to favorites
+        detailedData.push({
+          ayahNumber,
+          surahNumber,
+          surahName,
+          text: ayahText,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      await AsyncStorage.setItem(
+        "quran_favorites_detailed",
+        JSON.stringify(detailedData)
+      );
+
+      // Update local state
+      if (isFavorite) {
+        setFavoriteAyahs((prev) =>
+          prev.filter(
+            (fav) =>
+              !(
+                fav.surahNumber === surahNumber && fav.ayahNumber === ayahNumber
+              )
+          )
+        );
+      } else {
+        setFavoriteAyahs((prev) => [...prev, { surahNumber, ayahNumber }]);
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
+  const handleShareAyah = async () => {
+    if (!selectedAyah || !ayahShareViewRef.current) {
+      return;
+    }
+
+    try {
+      // Wait a bit to ensure the view is fully rendered
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Double check ref is still valid after waiting
+      if (!ayahShareViewRef.current) {
+        return;
+      }
+
+      // Capture the ayah view as base64 data URI
+      const dataUri = await captureRef(ayahShareViewRef.current, {
+        format: "png",
+        quality: 1,
+        result: "data-uri",
+      });
+
+      if (!dataUri || !dataUri.startsWith("data:image")) {
+        throw new Error("Invalid capture result");
+      }
+
+      // Extract base64 data
+      const base64Data = dataUri.split(",")[1];
+
+      // Create a file path in cache directory
+      const fileName = `ayah_${Date.now()}.png`;
+      const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+
+      // Write the base64 data to file
+      await FileSystem.writeAsStringAsync(fileUri, base64Data, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      // Check if sharing is available
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (isAvailable) {
+        // Share the file with proper MIME type
+        await Sharing.shareAsync(fileUri, {
+          mimeType: "image/png",
+          dialogTitle: "مشاركة آية",
+          UTI: "public.png", // iOS only
+        });
+      }
+    } catch (error) {
+      console.error("Error sharing ayah as image:", error);
+    }
+  };
+
+  const handleGoToSurah = () => {
+    if (!selectedAyah) return;
+    setShowAyahModal(false);
+    router.push(`/quran/${selectedAyah.surahNumber}` as any);
+  };
 
   useEffect(() => {
     // Simulate loading time for better UX
@@ -539,7 +700,8 @@ export default function QuranScreen() {
                   },
                 ]}
                 onPress={() => {
-                  router.push(`/quran/${item.surahNumber}` as any);
+                  setSelectedAyah(item);
+                  setShowAyahModal(true);
                 }}
               >
                 <View style={styles.ayahResultHeader}>
@@ -649,6 +811,289 @@ export default function QuranScreen() {
           }
         />
       )}
+
+      {/* Ayah Modal */}
+      <Modal
+        visible={showAyahModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowAyahModal(false)}
+      >
+        <Pressable
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onPress={() => setShowAyahModal(false)}
+        >
+          <View
+            style={{
+              backgroundColor: color.bg20,
+              borderRadius: 16,
+              padding: 20,
+              margin: 20,
+              minWidth: "85%",
+              maxWidth: "100%",
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 8,
+            }}
+          >
+            {selectedAyah && (
+              <>
+                {/* Ayah Text */}
+                <Text
+                  style={{
+                    fontSize: 20,
+                    marginBottom: 16,
+                    color: color.text,
+                    fontFamily: FontFamily.quranBold,
+                  }}
+                >
+                  {selectedAyah.text}
+                </Text>
+
+                {/* Surah and Ayah Info */}
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: FontFamily.medium,
+                    textAlign: "center",
+                    marginBottom: 20,
+                    color: color.text,
+                    opacity: 0.7,
+                  }}
+                >
+                  {selectedAyah.surahName} - الآية {selectedAyah.ayahNumber}
+                </Text>
+
+                {/* Action Buttons */}
+                <View
+                  style={{
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 10,
+                  }}
+                >
+                  {/* Go to Surah Button - Top */}
+                  <TouchableOpacity
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: color.primary20,
+                      paddingHorizontal: 16,
+                      paddingVertical: 10,
+                      borderRadius: 20,
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                    onPress={handleGoToSurah}
+                  >
+                    <Text
+                      style={{
+                        color: color.text,
+                        fontFamily: FontFamily.medium,
+                        marginRight: 8,
+                        fontSize: 11,
+                      }}
+                    >
+                      الذهاب للسورة
+                    </Text>
+                    <FontAwesome5
+                      name="arrow-right"
+                      size={14}
+                      color={color.text}
+                    />
+                  </TouchableOpacity>
+
+                  {/* Favorite and Share Buttons - Bottom */}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 10,
+                      flexWrap: "wrap",
+                      width: "100%",
+                    }}
+                  >
+                    {/* Favorite Button */}
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        backgroundColor: isAyahFavorite(
+                          selectedAyah.surahNumber,
+                          selectedAyah.ayahNumber
+                        )
+                          ? color.primary
+                          : color.primary20,
+                        paddingHorizontal: 16,
+                        paddingVertical: 10,
+                        borderRadius: 20,
+                        flex: 1,
+                        minWidth: "30%",
+                        justifyContent: "center",
+                      }}
+                      onPress={() => {
+                        toggleFavorite(
+                          selectedAyah.surahNumber,
+                          selectedAyah.surahName,
+                          selectedAyah.ayahNumber,
+                          selectedAyah.text
+                        );
+                      }}
+                    >
+                      <FontAwesome6
+                        name={
+                          isAyahFavorite(
+                            selectedAyah.surahNumber,
+                            selectedAyah.ayahNumber
+                          )
+                            ? "heart-circle-check"
+                            : "heart"
+                        }
+                        size={13}
+                        color={
+                          isAyahFavorite(
+                            selectedAyah.surahNumber,
+                            selectedAyah.ayahNumber
+                          )
+                            ? color.white
+                            : color.text
+                        }
+                      />
+                      <Text
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          color: isAyahFavorite(
+                            selectedAyah.surahNumber,
+                            selectedAyah.ayahNumber
+                          )
+                            ? color.white
+                            : color.text,
+                          fontFamily: FontFamily.medium,
+                          marginLeft: 8,
+                          fontSize: 11,
+                        }}
+                      >
+                        {isAyahFavorite(
+                          selectedAyah.surahNumber,
+                          selectedAyah.ayahNumber
+                        )
+                          ? "مفضلة"
+                          : "إضافة للمفضلة"}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {/* Share Button */}
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        backgroundColor: color.primary,
+                        paddingHorizontal: 16,
+                        paddingVertical: 10,
+                        borderRadius: 20,
+                        flex: 1,
+                        minWidth: "30%",
+                        justifyContent: "center",
+                      }}
+                      onPress={handleShareAyah}
+                    >
+                      <FontAwesome5
+                        name="share-alt"
+                        size={13}
+                        color={color.white}
+                      />
+                      <Text
+                        style={{
+                          color: color.white,
+                          fontFamily: FontFamily.medium,
+                          marginLeft: 8,
+                          fontSize: 11,
+                        }}
+                      >
+                        مشاركة
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </>
+            )}
+          </View>
+        </Pressable>
+      </Modal>
+
+      {/* Hidden View for screenshot with logo - only visible when capturing */}
+      <View
+        ref={ayahShareViewRef}
+        collapsable={false}
+        style={{
+          position: "absolute",
+          left: -9999,
+          top: -9999,
+          opacity: 0,
+          pointerEvents: "none",
+          backgroundColor: color.bg20,
+          paddingVertical: 24,
+          paddingHorizontal: 20,
+          minWidth: 300,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {selectedAyah ? (
+          <>
+            <Text
+              style={{
+                fontSize: 20,
+                marginBottom: 16,
+                color: color.text,
+                fontFamily: FontFamily.quranBold,
+                textAlign: "center",
+              }}
+            >
+              {selectedAyah.text}
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: FontFamily.medium,
+                textAlign: "center",
+                marginBottom: 20,
+                color: color.text20,
+                opacity: 0.7,
+              }}
+            >
+              {selectedAyah.surahName} - الآية {selectedAyah.ayahNumber}
+            </Text>
+
+            {/* App Logo for shared image */}
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 12,
+              }}
+            >
+              <AppLogo
+                size={32}
+                primaryColor={color.primary + "80"}
+                secondaryColor={color.primary + "80"}
+                backgroundColor="transparent"
+              />
+            </View>
+          </>
+        ) : null}
+      </View>
     </View>
   );
 }
@@ -833,16 +1278,16 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
   },
   ayahResultText: {
-    fontSize: 16,
-    fontFamily: FontFamily.quran,
-    textAlign: "right",
-    lineHeight: 28,
+    fontSize: 20,
+    fontFamily: FontFamily.quranBold,
+
+    lineHeight: 34,
     marginBottom: 8,
   },
   ayahResultTranslation: {
     fontSize: 13,
     fontFamily: FontFamily.regular,
-    textAlign: "right",
+
     lineHeight: 20,
     fontStyle: "italic",
   },

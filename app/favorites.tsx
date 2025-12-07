@@ -7,6 +7,7 @@ import {
   FlatList,
   Animated,
   Easing,
+  StyleSheet,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { useTheme } from "@/context/ThemeContext";
@@ -175,62 +176,30 @@ export default function FavoritesScreen() {
     return (
       <View style={{ position: "relative", marginBottom: 8 }}>
         <TouchableOpacity
-          style={{
-            borderRadius: 16,
-            backgroundColor: color.bg20,
-            paddingVertical: 12,
-            paddingHorizontal: 16,
-            width: "100%",
-            borderWidth: 0,
-          }}
+          style={[
+            styles.ayahResultItem,
+            {
+              backgroundColor: color.bg20,
+              borderColor: color.border,
+            },
+          ]}
           onPress={() => handleAyahPress(item)}
           onLongPress={() => copyToClipboard(item)}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-            }}
-          >
-            <Text
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: 18,
-                marginRight: 12,
-                fontFamily: FontFamily.bold,
-                color: color.primary,
-              }}
-            >
-              ﴿ {toArabicDigits(item.ayahNumber)} ﴾
+          <View style={styles.ayahResultHeader}>
+            <Text style={[styles.ayahResultSurah, { color: color.primary }]}>
+              {item.surahName}
             </Text>
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: FontFamily.quran,
-                  color: color.darkText,
-                }}
-              >
-                {item.text}
-              </Text>
-
-              {/* Surah name in small text */}
-              <Text
-                style={{
-                  fontSize: 12,
-                  fontFamily: FontFamily.medium,
-                  color: color.text20,
-                  opacity: 1,
-                  textAlign: "right",
-                }}
-              >
-                {item.surahName}
-              </Text>
-            </View>
+            <Text style={[styles.ayahResultNumber, { color: color.text20 }]}>
+              آية {item.ayahNumber}
+            </Text>
           </View>
+          <Text
+            style={[styles.ayahResultText, { color: color.text }]}
+            numberOfLines={3}
+          >
+            {item.text}
+          </Text>
         </TouchableOpacity>
 
         {/* Copied Notification */}
@@ -487,3 +456,33 @@ export default function FavoritesScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  ayahResultItem: {
+    padding: 16,
+    marginBottom: 12,
+    borderRadius: 12,
+    borderWidth: 0,
+  },
+  ayahResultHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  ayahResultSurah: {
+    fontSize: 14,
+    fontFamily: FontFamily.bold,
+  },
+  ayahResultNumber: {
+    fontSize: 12,
+    fontFamily: FontFamily.regular,
+  },
+  ayahResultText: {
+    fontSize: 20,
+    fontFamily: FontFamily.quranBold,
+
+    lineHeight: 34,
+    marginBottom: 8,
+  },
+});

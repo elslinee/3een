@@ -81,6 +81,7 @@ const Tooltip: React.FC<TooltipProps> = ({ visible, text, onClose, color }) => {
 // Pager-based swiper
 export default function AzkarSwiper({ azkar, color }: Props) {
   const [index, setIndex] = useState(0);
+  const indexRef = useRef(0);
   const target = useMemo(() => {
     const raw = azkar && azkar[index] ? azkar[index].count : "1";
     const digits =
@@ -93,6 +94,11 @@ export default function AzkarSwiper({ azkar, color }: Props) {
   const [showCompleted, setShowCompleted] = useState(false);
 
   const current = azkar && azkar.length > 0 ? azkar[index] : undefined;
+
+  // Update ref whenever index changes
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
 
   const [copied, setCopied] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -168,13 +174,17 @@ export default function AzkarSwiper({ azkar, color }: Props) {
 
   const handleCopy = useCallback(async () => {
     try {
-      if (!current) return;
-      let text = current.content;
-      if (current.description) {
-        text += `\n\n${current.description}`;
+      const currentIndex = indexRef.current;
+      if (!azkar || azkar.length === 0 || currentIndex >= azkar.length) return;
+      const zikr = azkar[currentIndex];
+      if (!zikr) return;
+
+      let text = zikr.content;
+      if (zikr.description) {
+        text += `\n\n${zikr.description}`;
       }
-      if (current.reference) {
-        text += `\n\n${current.reference}`;
+      if (zikr.reference) {
+        text += `\n\n${zikr.reference}`;
       }
       await Clipboard.setStringAsync(text);
       setCopied(true);
@@ -182,7 +192,7 @@ export default function AzkarSwiper({ azkar, color }: Props) {
     } catch (error) {
       Alert.alert("خطأ", "حدث خطأ في النسخ");
     }
-  }, [current]);
+  }, [azkar]);
 
   const showTooltip = useCallback((text: string) => {
     setTooltip({ visible: true, text });
@@ -194,7 +204,16 @@ export default function AzkarSwiper({ azkar, color }: Props) {
   }, []);
 
   const handleShare = useCallback(async () => {
-    if (!current || !zikrShareViewRef.current) return;
+    const currentIndex = indexRef.current;
+    if (
+      !azkar ||
+      azkar.length === 0 ||
+      currentIndex >= azkar.length ||
+      !zikrShareViewRef.current
+    )
+      return;
+    const zikr = azkar[currentIndex];
+    if (!zikr) return;
 
     try {
       // Wait a bit to ensure the view is fully rendered for maximum quality
@@ -230,12 +249,12 @@ export default function AzkarSwiper({ azkar, color }: Props) {
         });
       } else {
         // Fallback: share text
-        let text = current.content;
-        if (current.description) {
-          text += `\n\n${current.description}`;
+        let text = zikr.content;
+        if (zikr.description) {
+          text += `\n\n${zikr.description}`;
         }
-        if (current.reference) {
-          text += `\n\n${current.reference}`;
+        if (zikr.reference) {
+          text += `\n\n${zikr.reference}`;
         }
         await Share.share({ message: text });
       }
@@ -243,19 +262,21 @@ export default function AzkarSwiper({ azkar, color }: Props) {
       console.error("Error sharing zikr:", error);
       // Fallback: share text
       try {
-        let text = current.content;
-        if (current.description) {
-          text += `\n\n${current.description}`;
+        const zikr = azkar[currentIndex];
+        if (!zikr) return;
+        let text = zikr.content;
+        if (zikr.description) {
+          text += `\n\n${zikr.description}`;
         }
-        if (current.reference) {
-          text += `\n\n${current.reference}`;
+        if (zikr.reference) {
+          text += `\n\n${zikr.reference}`;
         }
         await Share.share({ message: text });
       } catch (e) {
         Alert.alert("خطأ", "حدث خطأ في المشاركة");
       }
     }
-  }, [current]);
+  }, [azkar]);
 
   // Reset to first item when data changes, and ensure valid index
   useEffect(() => {

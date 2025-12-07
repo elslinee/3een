@@ -11,7 +11,7 @@ import ChangelogModal from "@/components/ChangelogModal";
 export default function HomeScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
-  const CHANGELOG_KEY = "app_changelog_shown_v7"; // bump suffix on new releases
+  const CHANGELOG_KEY = "app_changelog_shown_v8";
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: color.background }}>
@@ -94,14 +94,15 @@ export default function HomeScreen() {
       {/* First-run changelog modal */}
       <ChangelogModal
         changelogKey={CHANGELOG_KEY}
-        version="الإصدار 1.0.0"
+        version="الإصدار 1.3.0"
         title="آخر التغييرات"
         changes={[
-          "إزالة صلاة الشروق من قائمة الصلوات والإشعارات",
-          "إضافة لونين جديدين للوحة الألوان: البنفسجي والرمادي",
-          "إضافة نصائح تفاعلية للأزرار في صفحة السورة والأذكار",
-          "إصلاح مشكلة شاشة التحميل على بعض الأجهزة (مثل شاومي)",
-          "إضافة وضع 'تلقائي' للثيم يتبع إعدادات الجهاز تلقائياً",
+          "إصلاح مشكلة عدم وصول الاشعارات عند عدم وجود اتصال بالانترنت",
+          "إصلاح نقص بعض الأذكار - إضافة سور الإخلاص والفلق والناس في أذكار الصباح والمساء",
+          "حل مشكلة النسخ في الأذكار",
+          "إضافة نافذة خيارات عند الضغط على الآية في نتائج البحث",
+          "توحيد تصميم عناصر الآيات في نتائج البحث مع صفحة المفضلة",
+          "تحسين زر المشاركة في نتائج البحث لمشاركة الآية كصورة منسقة",
         ]}
         color={color}
       />
