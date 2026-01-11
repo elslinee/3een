@@ -328,7 +328,7 @@ export default function AzkarSwiper({ azkar, color }: Props) {
         <PagerView
           ref={pagerRef}
           style={{ flex: 1, paddingHorizontal: 12, direction: "ltr" }}
-          scrollEnabled={false}
+          scrollEnabled={true}
           initialPage={0}
           onPageSelected={(e: any) => {
             const newIndex = e.nativeEvent.position;
@@ -779,6 +779,7 @@ const AzkarCardMemo = memo(
           styles.card,
           {
             backgroundColor: color.bg20,
+            marginHorizontal: 10,
           },
         ]}
       >
