@@ -221,7 +221,7 @@ export default function AboutScreen() {
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={[styles.footerText, { color: color.darkText }]}>
-          جميع الحقوق محفوظة © 2025
+          جميع الحقوق محفوظة © 2026
         </Text>
         <Text style={{ color: color.darkText }}>© elsline</Text>
       </View>

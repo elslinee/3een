@@ -35,7 +35,7 @@ export default function QiblaScreen() {
     const diff = Math.abs(((qiblaBearing - heading + 540) % 360) - 180);
     return diff <= 5; // Match tolerance in CompassView
   }, [heading, qiblaBearing]);
-
+  // const isAligned = true;
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
@@ -217,8 +217,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
-    marginBottom: -10,
+    marginBottom: 0,
     zIndex: 10,
+   
   },
   alignedText: {
     color: "white",

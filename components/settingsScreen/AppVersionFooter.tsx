@@ -16,7 +16,7 @@ export const AppVersionFooter: React.FC<AppVersionFooterProps> = ({
         الإصدار {APP_VERSION}
       </Text>
       <Text style={[styles.copyright, { color: color.darkText }]}>
-        جميع الحقوق محفوظة © 2025
+        جميع الحقوق محفوظة © 2026
       </Text>
     </View>
   );
@@ -38,4 +38,3 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.regular,
   },
 });
-

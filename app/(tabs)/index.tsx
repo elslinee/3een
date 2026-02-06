@@ -11,7 +11,7 @@ import ChangelogModal from "@/components/ChangelogModal";
 export default function HomeScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
-  const CHANGELOG_KEY = "app_changelog_shown_v8";
+  const CHANGELOG_KEY = "app_changelog_shown_v9";
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: color.background }}>
@@ -91,15 +91,13 @@ export default function HomeScreen() {
       {/* First-run changelog modal */}
       <ChangelogModal
         changelogKey={CHANGELOG_KEY}
-        version="الإصدار 1.3.0"
+        version="الإصدار 1.4.0"
         title="آخر التغييرات"
         changes={[
-          "إصلاح مشكلة عدم وصول الاشعارات عند عدم وجود اتصال بالانترنت",
-          "إصلاح نقص بعض الأذكار - إضافة سور الإخلاص والفلق والناس في أذكار الصباح والمساء",
-          "حل مشكلة النسخ في الأذكار",
-          "إضافة نافذة خيارات عند الضغط على الآية في نتائج البحث",
-          "توحيد تصميم عناصر الآيات في نتائج البحث مع صفحة المفضلة",
-          "تحسين زر المشاركة في نتائج البحث لمشاركة الآية كصورة منسقة",
+          "إطلاق ميزة تحديد اتجاه القبلة بتصميم بوصلة احترافية وفخمة",
+          "تحسين كبير في استجابة تحديد الموقع (GPS) وسرعة الحصول على الاحداثيات",
+          "عرض الاتجاهات الأربعة والفرعية ودرجات الزوايا بدقة عالية على البوصلة",
+          "تحسينات عامة في الأداء واستقرار التطبيق",
         ]}
         color={color}
       />

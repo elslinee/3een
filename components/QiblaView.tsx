@@ -57,6 +57,7 @@ export const QiblaView: React.FC<QiblaViewProps> = ({
     const diff = Math.abs(((qiblaBearing - heading + 540) % 360) - 180);
     return diff <= ALIGNMENT_TOLERANCE;
   }, [heading, qiblaBearing]);
+  // const isAligned = true;
 
   useEffect(() => {
     rotation.value = withSpring(-heading, {
@@ -97,37 +98,130 @@ export const QiblaView: React.FC<QiblaViewProps> = ({
 
   const renderMarkers = () => {
     const markers = [];
-    for (let i = 0; i < 360; i += 30) {
-      const isMajor = i % 90 === 0;
-      const length = isMajor ? 15 : 8;
+    // 1. Tick Marks (every 2 degrees)
+    for (let i = 0; i < 360; i += 2) {
+      const isMain = i % 10 === 0;
+      const isQuarter = i % 90 === 0;
+      const radius = 135;
+      const length = isQuarter ? 10 : isMain ? 7 : 4;
+
       markers.push(
-        <G key={i} transform={`rotate(${i})`}>
-          <Line
-            x1="0"
-            y1={-(SIZE / 2 - 10)}
-            x2="0"
-            y2={-(SIZE / 2 - 10 - length)}
-            stroke={textColor}
-            strokeWidth={isMajor ? 3 : 1}
-            opacity={isMajor ? 0.8 : 0.4}
-          />
-          {isMajor && (
-            <SvgText
-              x="0"
-              y={-(SIZE / 2 - 40)}
-              fill={textColor}
-              fontSize="14"
-              fontWeight="bold"
-              textAnchor="middle"
-              transform={`rotate(${-i})`}
-            >
-              {i === 0 ? "N" : i === 90 ? "E" : i === 180 ? "S" : "W"}
-            </SvgText>
-          )}
-        </G>,
+        <Line
+          key={`tick-${i}`}
+          x1="0"
+          y1={-radius}
+          x2="0"
+          y2={-(radius - length)}
+          stroke={textColor}
+          strokeWidth={isMain ? 1.5 : 0.5}
+          opacity={isMain ? 0.6 : 0.3}
+          transform={`rotate(${i})`}
+        />,
       );
     }
+
+    // 2. Degree Numbers (every 15 degrees, skipping 90s)
+    for (let i = 0; i < 360; i += 15) {
+      if (i % 90 === 0) continue;
+      markers.push(
+        <SvgText
+          key={`deg-${i}`}
+          x="0"
+          y="-145"
+          fill={textColor}
+          fontSize="9"
+          fontWeight="bold"
+          textAnchor="middle"
+          opacity={0.6}
+          transform={`rotate(${i})`}
+        >
+          {i}
+        </SvgText>,
+      );
+    }
+
+    // 3. Cardinal & Ordinal Directions
+    const directions = [
+      { label: "N", angle: 0, size: 22, color: primaryColor, weight: "900" },
+      { label: "E", angle: 90, size: 18, color: textColor, weight: "bold" },
+      { label: "S", angle: 180, size: 18, color: textColor, weight: "bold" },
+      { label: "W", angle: 270, size: 18, color: textColor, weight: "bold" },
+      { label: "ne", angle: 45, size: 12, color: textColor, weight: "normal" },
+      { label: "se", angle: 135, size: 12, color: textColor, weight: "normal" },
+      { label: "sw", angle: 225, size: 12, color: textColor, weight: "normal" },
+      { label: "nw", angle: 315, size: 12, color: textColor, weight: "normal" },
+    ];
+
+    directions.forEach((d) => {
+      markers.push(
+        <SvgText
+          key={`dir-${d.label}`}
+          x="0"
+          y={d.angle % 90 === 0 ? "-165" : "-95"}
+          fill={d.color}
+          fontSize={d.size}
+          fontWeight={d.weight}
+          textAnchor="middle"
+          alignmentBaseline="middle"
+          transform={`rotate(${d.angle}) rotate(${-d.angle}, 0, ${d.angle % 90 === 0 ? "-165" : "-95"})`}
+        >
+          {d.label}
+        </SvgText>,
+      );
+    });
+
     return markers;
+  };
+
+  const renderRose = () => {
+    return (
+      <G>
+        {/* Main Star (N-S-E-W) */}
+        {[0, 90, 180, 270].map((angle) => (
+          <G key={`main-star-${angle}`} transform={`rotate(${angle})`}>
+            {/* Shaded Right Half */}
+            <Path d="M 0 -130 L 15 0 L 0 0 Z" fill={isAligned ? successColor : primaryColor} />
+            {/* Light Left Half */}
+            <Path
+              d="M 0 -130 L -15 0 L 0 0 Z"
+              fill={isAligned ? successColor : primaryColor}
+              opacity={0.6}
+            />
+          </G>
+        ))}
+
+        {/* Secondary Star (NE-SE-SW-NW) */}
+        {[45, 135, 225, 315].map((angle) => (
+          <G key={`sec-star-${angle}`} transform={`rotate(${angle})`}>
+            {/* Shaded Right Half */}
+            <Path d="M 0 -85 L 10 0 L 0 0 Z" fill={textColor} opacity={0.5} />
+            {/* Light Left Half */}
+            <Path d="M 0 -85 L -10 0 L 0 0 Z" fill={textColor} opacity={0.2} />
+          </G>
+        ))}
+
+        {/* Inner Decorative Circles */}
+        <Circle
+          cx="0"
+          cy="0"
+          r="40"
+          stroke={textColor}
+          strokeWidth="0.5"
+          fill="none"
+          opacity={0.3}
+        />
+        <Circle
+          cx="0"
+          cy="0"
+          r="45"
+          stroke={textColor}
+          strokeWidth="0.5"
+          fill="none"
+          opacity={0.3}
+        />
+        <Circle cx="0" cy="0" r="5" fill={primaryColor} />
+      </G>
+    );
   };
 
   return (
@@ -171,11 +265,17 @@ export const QiblaView: React.FC<QiblaViewProps> = ({
               cy="0"
               r="140"
               stroke={isAligned ? successColor : primaryColor}
-              strokeWidth="2"
+              strokeWidth="1"
               fill="transparent"
               opacity={0.1}
             />
+            {/* 1. Base Rose Elements */}
+            {renderRose()}
+
+            {/* 2. External Labels & Ticks */}
             <G>{renderMarkers()}</G>
+
+            {/* 3. Qibla Needle (Traditional Style) */}
             {qiblaBearing !== null && (
               <G transform={`rotate(${qiblaBearing})`}>
                 <Path
@@ -185,25 +285,6 @@ export const QiblaView: React.FC<QiblaViewProps> = ({
               </G>
             )}
           </Svg>
-
-          {/* Qibla Icon Indicator */}
-          {qiblaBearing !== null && (
-            <Animated.View
-              style={[
-                styles.qiblaIconContainer,
-                { transform: [{ rotate: `${qiblaBearing}deg` }] },
-                needleAnimatedStyle,
-              ]}
-            >
-              <View style={styles.iconShift}>
-                <MaterialCommunityIcons
-                  name="arrow-up"
-                  size={38}
-                  color={isAligned ? successColor : primaryColor}
-                />
-              </View>
-            </Animated.View>
-          )}
         </Animated.View>
 
         {/* Static Center Point */}
