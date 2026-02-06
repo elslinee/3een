@@ -144,7 +144,7 @@ export default function QiblaScreen() {
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color={colors.primary} />
               <Text style={[styles.loadingText, { color: colors.text }]}>
-                جاري تحديد الاتجاه...
+                جاري تحميل البوصلة...
               </Text>
             </View>
           )}
