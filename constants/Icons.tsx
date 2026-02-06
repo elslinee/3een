@@ -8,6 +8,7 @@ import Svg, {
   Rect,
   Circle,
   Stop,
+  Polygon,
 } from "react-native-svg";
 
 type GenericIconProps = {
@@ -612,6 +613,41 @@ l40 34 27 -28 c15 -16 51 -42 79 -57 48 -27 61 -29 152 -29 89 0 105 3 150 27
           d="M3382 3207 l-22 -23 0 -625 0 -626 23 -21 c29 -27 77 -28 108 -3 l24
 19 0 632 0 632 -24 19 c-32 26 -82 25 -109 -4z"
         />
+      </G>
+    </Svg>
+  );
+};
+export const CompassIcon = ({
+  color = "",
+  width = 38,
+  height = 42,
+  pressed = false,
+  pressedColor = "",
+}: GenericIconProps) => {
+  return (
+    <Svg width={width} height={height} fill="none" viewBox="0 0 24 24">
+      <G id="SVGRepo_bgCarrier" stroke-width="0"></G>
+      <G
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></G>
+      <G id="SVGRepo_iconCarrier">
+        <Rect fill="transparent"></Rect>
+        <Path
+          d="M14.1214 14.1213L16.5165 8.13347C16.6798 7.72532 16.2747 7.32028 15.8666 7.48354L9.87872 9.87868M14.1214 14.1213L8.13351 16.5165C7.72536 16.6797 7.32032 16.2747 7.48358 15.8665L9.87872 9.87868M14.1214 14.1213L9.87872 9.87868"
+          stroke={color}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></Path>
+        <Circle
+          cx="12"
+          cy="12"
+          r="9"
+          stroke={color}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        ></Circle>
       </G>
     </Svg>
   );

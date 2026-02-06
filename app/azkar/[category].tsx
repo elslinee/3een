@@ -51,13 +51,11 @@ export default function AzkarCategoryScreen() {
       const stored = await AsyncStorage.getItem(FAVORITES_KEY);
       if (stored) {
         const favArray = JSON.parse(stored);
-        // Filter favorites for current category only and create unique keys
         const favKeys = favArray
           .filter((fav: Zikr) => fav.category === category)
           .map((fav: Zikr) => `${fav.category}|||${fav.content}`);
         setFavorites(favKeys);
       } else {
-        // If no favorites stored, set to empty array
         setFavorites([]);
       }
       setFavoritesLoaded(true);
@@ -70,9 +68,8 @@ export default function AzkarCategoryScreen() {
 
   const loadAzkar = async () => {
     try {
-      // Dynamic import لتقليل حجم الـ bundle
+    
       const { default: AzkarData } = await import("@/assets/json/Azkar.json");
-      // Access the category from the JSON data
       const categoryAzkar = (AzkarData as any)[category];
 
       if (categoryAzkar && Array.isArray(categoryAzkar)) {

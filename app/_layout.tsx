@@ -172,6 +172,13 @@ function RootLayoutNav() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="qibla"
+          options={{
+            title: "القبلة",
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       {/* Update Modal */}

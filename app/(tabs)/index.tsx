@@ -4,7 +4,7 @@ import PrayerTimesComponent from "@/components/homeScreen/PrayerTimesComponent";
 import { getColors } from "@/constants/Colors";
 import { useTheme } from "@/context/ThemeContext";
 import ScreenBtn from "@/components/homeScreen/ScreenBtn";
-import { QuranIcon, AzkarIcon, BookIcon } from "@/constants/Icons";
+import { QuranIcon, AzkarIcon, BookIcon, CompassIcon } from "@/constants/Icons";
 import { navigateToPage } from "@/utils/navigationUtils";
 import ChangelogModal from "@/components/ChangelogModal";
 
@@ -51,7 +51,6 @@ export default function HomeScreen() {
               title="الأذكار"
               Icon={AzkarIcon}
               onPress={() => navigateToPage("/azkar")}
-              newTab={true}
             />
           </View>
           <View
@@ -63,7 +62,18 @@ export default function HomeScreen() {
             <ScreenBtn
               style={{
                 flex: 1,
-
+              }}
+              iconWidth={60}
+              iconHeight={60}
+              color={color}
+              title="القبلة"
+              Icon={CompassIcon}
+              onPress={() => navigateToPage("/qibla")}
+              newTab={true}
+            />
+            <ScreenBtn
+              style={{
+                flex: 1,
                 pointerEvents: "none",
               }}
               iconWidth={45}
@@ -73,19 +83,6 @@ export default function HomeScreen() {
               Icon={BookIcon}
               onPress={() => ""}
               soon={true}
-            />
-            <ScreenBtn
-              style={{
-                flex: 1,
-                opacity: 0,
-                pointerEvents: "none",
-              }}
-              iconWidth={45}
-              iconHeight={45}
-              color={color}
-              title="المكتبة"
-              Icon={BookIcon}
-              onPress={() => ""}
             />
           </View>
         </View>

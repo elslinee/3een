@@ -20,7 +20,7 @@ interface LocationContextType {
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(
-  undefined
+  undefined,
 );
 
 interface LocationProviderProps {
@@ -31,7 +31,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
   children,
 }) => {
   const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
+    null,
   );
   const [address, setAddress] = useState<string>("جاري التحميل...");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -65,17 +65,17 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
   // Save location data to AsyncStorage
   const saveLocationData = async (
     locationData: Location.LocationObject,
-    addressData: string
+    addressData: string,
   ) => {
     try {
       await AsyncStorage.setItem(
         SAVED_LOCATION_KEY,
-        JSON.stringify(locationData)
+        JSON.stringify(locationData),
       );
       await AsyncStorage.setItem(SAVED_ADDRESS_KEY, addressData);
       await AsyncStorage.setItem(
         LAST_LOCATION_REQUEST_KEY,
-        Date.now().toString()
+        Date.now().toString(),
       );
     } catch (error) {
       console.error("خطأ في حفظ البيانات:", error);
@@ -156,7 +156,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       // If not granted, check if permission was denied permanently
       if (existingStatus !== "granted") {
         const permissionDenied = await AsyncStorage.getItem(
-          PERMISSION_DENIED_KEY
+          PERMISSION_DENIED_KEY,
         );
 
         // If permission was denied and can't ask again, don't request
@@ -202,10 +202,21 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         return;
       }
 
-      // Try to get current position with low accuracy to avoid high precision requests
-      let location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Lowest,
-      });
+      // Try to get last known position first for speed and to avoid some "unavailable" errors
+      let location = await Location.getLastKnownPositionAsync();
+
+      if (!location) {
+        // Try to get current position with low accuracy to avoid high precision requests
+        try {
+          location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.Lowest,
+          });
+        } catch (e: any) {
+          // If it fails with "unavailable", we'll check saved data in the main catch block
+          throw e;
+        }
+      }
+
       setLocation(location);
 
       let reverseGeocode: Location.LocationGeocodedAddress[] = [];
@@ -226,7 +237,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           {
             region: addr.region || undefined,
             country: addr.country || undefined,
-          }
+          },
         );
 
         finalAddress = translatedAddress || "الموقع غير محدد";
@@ -236,19 +247,27 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
       // حفظ البيانات للاستخدام دون إنترنت
       await saveLocationData(location, finalAddress);
-    } catch (error) {
-      console.error("خطأ في تحديد الموقع:", error);
-
+    } catch (error: any) {
       // التحقق من وجود بيانات محفوظة قبل إظهار الخطأ
       const savedLocationStr = await AsyncStorage.getItem(SAVED_LOCATION_KEY);
       const savedAddress = await AsyncStorage.getItem(SAVED_ADDRESS_KEY);
 
+      const errorMsgLower = error?.message?.toLowerCase() || "";
+      const isUnavailableError =
+        errorMsgLower.includes("location services are disabled") ||
+        errorMsgLower.includes("location is unavailable") ||
+        errorMsgLower.includes("location provider");
+
       if (!savedLocationStr || !savedAddress) {
         // فقط إذا لم تكن هناك بيانات محفوظة، اعرض رسالة الخطأ
+        console.error("خطأ في تحديد الموقع:", error);
         setErrorMsg("خطأ في تحديد الموقع");
         setAddress("خطأ في تحديد الموقع");
+      } else if (!isUnavailableError) {
+        // إذا كانت هناك بيانات محفوظة، لا نعرض رسالة خطأ للمستخدم
+        // ولكن نسجل الأخطاء غير المتوقعة (ليست مجرد "الخدمات معطلة") في الكونصول
+        console.error("خطأ غير متوقع في الموقع:", error);
       }
-      // إذا كانت هناك بيانات محفوظة، لا تعرض رسالة الخطأ
     } finally {
       setIsLoading(false);
     }
@@ -304,10 +323,10 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         // طلب الموقع مرة واحدة فقط عند أول فتح للتطبيق
         try {
           const firstLaunchDone = await AsyncStorage.getItem(
-            FIRST_LAUNCH_DONE_KEY
+            FIRST_LAUNCH_DONE_KEY,
           );
           const permissionDenied = await AsyncStorage.getItem(
-            PERMISSION_DENIED_KEY
+            PERMISSION_DENIED_KEY,
           );
 
           // Only ask if first launch and permission wasn't permanently denied
