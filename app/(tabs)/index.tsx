@@ -7,6 +7,7 @@ import ScreenBtn from "@/components/homeScreen/ScreenBtn";
 import { QuranIcon, AzkarIcon, BookIcon, CompassIcon } from "@/constants/Icons";
 import { navigateToPage } from "@/utils/navigationUtils";
 import ChangelogModal from "@/components/ChangelogModal";
+import NewUpdateModal from "@/components/NewUpdateModal";
 
 export default function HomeScreen() {
   const { theme, colorScheme } = useTheme();
@@ -99,6 +100,19 @@ export default function HomeScreen() {
           "عرض الاتجاهات الأربعة والفرعية ودرجات الزوايا بدقة عالية على البوصلة",
           "تحسينات عامة في الأداء واستقرار التطبيق",
         ]}
+        color={color}
+      />
+
+      {/* New Store Update Available Modal */}
+      <NewUpdateModal
+        latestVersion="1.4.0"
+        changes={[
+          "إطلاق ميزة تحديد اتجاه القبلة بتصميم بوصلة احترافية وفخمة",
+          "تحسين كبير في استجابة تحديد الموقع (GPS) وسرعة الحصول على الاحداثيات",
+          "عرض الاتجاهات الأربعة والفرعية ودرجات الزوايا بدقة عالية على البوصلة",
+          "تحسينات عامة في الأداء واستقرار التطبيق",
+        ]}
+        storeUrl="https://play.google.com/store/apps/details?id=com.elsline.een"
         color={color}
       />
     </ScrollView>
