@@ -10,6 +10,24 @@ import { Linking } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TranslationService } from "@/utils/translationService";
 
+// Some devices/emulators never deliver a fresh GPS fix (e.g. no mock location was
+// pushed in the emulator's Extended Controls), which leaves getCurrentPositionAsync
+// pending forever. Race it against a timeout so the UI never spins indefinitely.
+const getCurrentPositionWithTimeout = (
+  options: Location.LocationOptions,
+  timeoutMs: number = 15000,
+): Promise<Location.LocationObject> => {
+  return Promise.race([
+    Location.getCurrentPositionAsync(options),
+    new Promise<Location.LocationObject>((_, reject) =>
+      setTimeout(
+        () => reject(new Error("location request timed out")),
+        timeoutMs,
+      ),
+    ),
+  ]);
+};
+
 interface LocationContextType {
   location: Location.LocationObject | null;
   address: string;
@@ -17,6 +35,11 @@ interface LocationContextType {
   isLoading: boolean;
   refreshLocation: () => Promise<void>;
   openLocationSettingsAndRefresh: () => Promise<void>;
+  restartLocation: () => Promise<boolean>;
+  setManualLocation: (
+    coords: { latitude: number; longitude: number },
+    address: string,
+  ) => Promise<void>;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(
@@ -100,7 +123,10 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
     }
   };
 
-  const getCurrentLocation = async (forceRequest: boolean = false) => {
+  const getCurrentLocation = async (
+    forceRequest: boolean = false,
+    skipCache: boolean = false,
+  ): Promise<boolean> => {
     setIsLoading(true);
     setErrorMsg(null);
 
@@ -115,7 +141,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           const shouldRequest = await shouldRequestLocation();
           if (!shouldRequest) {
             setIsLoading(false);
-            return;
+            return true;
           }
         }
       }
@@ -130,7 +156,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         if (savedLocationStr && savedAddress) {
           // البيانات المحفوظة موجودة، استخدمها ولا تظهر رسالة الخطأ
           setIsLoading(false);
-          return;
+          return false;
         }
 
         // فقط إذا لم تكن هناك بيانات محفوظة، اعرض رسالة الخطأ
@@ -139,13 +165,13 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           setErrorMsg("الرجاء تفعيل خدمات الموقع في إعدادات الهاتف");
           setAddress("خدمات الموقع معطلة");
           setIsLoading(false);
-          return;
+          return false;
         } else {
           // إذا لم يكن forceRequest، لا تعرض رسالة خطأ مزعجة
           // فقط اعرض عنوان افتراضي
           setAddress("الموقع غير متاح");
           setIsLoading(false);
-          return;
+          return false;
         }
       }
 
@@ -164,7 +190,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           setAddress("الموقع غير متاح");
           setErrorMsg("اضغط لتفعيل الموقع");
           setIsLoading(false);
-          return;
+          return false;
         }
 
         // Only request if forced (user manually requested from settings)
@@ -186,7 +212,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
           setAddress("الموقع غير متاح");
           setErrorMsg("اضغط لتفعيل الموقع");
           setIsLoading(false);
-          return;
+          return false;
         }
       }
 
@@ -199,20 +225,23 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         setAddress("الموقع غير متاح");
         setErrorMsg("اضغط لتفعيل الموقع");
         setIsLoading(false);
-        return;
+        return false;
       }
 
       // Try to get last known position first for speed and to avoid some "unavailable" errors
-      let location = await Location.getLastKnownPositionAsync();
+      // (skipped when a fresh reading is explicitly requested, e.g. restartLocation)
+      let location = skipCache
+        ? null
+        : await Location.getLastKnownPositionAsync();
 
       if (!location) {
         // Try to get current position with low accuracy to avoid high precision requests
         try {
-          location = await Location.getCurrentPositionAsync({
+          location = await getCurrentPositionWithTimeout({
             accuracy: Location.Accuracy.Lowest,
           });
         } catch (e: any) {
-          // If it fails with "unavailable", we'll check saved data in the main catch block
+          // If it fails with "unavailable" or times out, we'll check saved data in the main catch block
           throw e;
         }
       }
@@ -247,6 +276,7 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
       // حفظ البيانات للاستخدام دون إنترنت
       await saveLocationData(location, finalAddress);
+      return true;
     } catch (error: any) {
       // التحقق من وجود بيانات محفوظة قبل إظهار الخطأ
       const savedLocationStr = await AsyncStorage.getItem(SAVED_LOCATION_KEY);
@@ -256,18 +286,27 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
       const isUnavailableError =
         errorMsgLower.includes("location services are disabled") ||
         errorMsgLower.includes("location is unavailable") ||
-        errorMsgLower.includes("location provider");
+        errorMsgLower.includes("location provider") ||
+        errorMsgLower.includes("timed out");
 
       if (!savedLocationStr || !savedAddress) {
         // فقط إذا لم تكن هناك بيانات محفوظة، اعرض رسالة الخطأ
         console.error("خطأ في تحديد الموقع:", error);
-        setErrorMsg("خطأ في تحديد الموقع");
+        setErrorMsg(
+          errorMsgLower.includes("timed out")
+            ? "تعذر تحديد الموقع، تأكد من تفعيل GPS وحاول تاني"
+            : "خطأ في تحديد الموقع",
+        );
         setAddress("خطأ في تحديد الموقع");
       } else if (!isUnavailableError) {
         // إذا كانت هناك بيانات محفوظة، لا نعرض رسالة خطأ للمستخدم
         // ولكن نسجل الأخطاء غير المتوقعة (ليست مجرد "الخدمات معطلة") في الكونصول
         console.error("خطأ غير متوقع في الموقع:", error);
+      } else if (forceRequest) {
+        // طلب صريح لتحديث الموقع فشل (مثلاً timeout) حتى لو فيه بيانات قديمة محفوظة
+        setErrorMsg("تعذر تحديد الموقع، تأكد من تفعيل GPS وحاول تاني");
       }
+      return false;
     } finally {
       setIsLoading(false);
     }
@@ -275,6 +314,40 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
 
   const refreshLocation = async () => {
     await getCurrentLocation();
+  };
+
+  // Forces a brand new GPS reading, ignoring any saved or cached (last known) position.
+  // Useful when the device/emulator reported a stale or wrong location.
+  // Returns false if it couldn't get a fresh fix (e.g. timed out), so callers can inform the user.
+  const restartLocation = async (): Promise<boolean> => {
+    return await getCurrentLocation(true, true);
+  };
+
+  // Lets the user pick a location manually (e.g. via search), bypassing GPS entirely.
+  const setManualLocation = async (
+    coords: { latitude: number; longitude: number },
+    addressText: string,
+  ) => {
+    setIsLoading(true);
+    setErrorMsg(null);
+
+    const manualLocation: Location.LocationObject = {
+      coords: {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        altitude: null,
+        accuracy: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+      },
+      timestamp: Date.now(),
+    };
+
+    setLocation(manualLocation);
+    setAddress(addressText);
+    await saveLocationData(manualLocation, addressText);
+    setIsLoading(false);
   };
 
   const openLocationSettingsAndRefresh = async () => {
@@ -370,6 +443,8 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
         isLoading,
         refreshLocation,
         openLocationSettingsAndRefresh,
+        restartLocation,
+        setManualLocation,
       }}
     >
       {children}

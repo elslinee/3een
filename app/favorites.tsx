@@ -18,6 +18,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AyahModal from "@/components/quranScreen/AyahModal";
 import GoBack from "@/components/GoBack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FavoriteAyah {
   surahNumber: number;
@@ -34,6 +35,7 @@ export default function FavoritesScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const [favoriteAyahs, setFavoriteAyahs] = useState<FavoriteAyah[]>([]);
   const [loading, setLoading] = useState(true);
@@ -284,31 +286,28 @@ export default function FavoritesScreen() {
   if (favoriteAyahs.length === 0) {
     return (
       <View
-        style={{ flex: 1, backgroundColor: color.background, paddingTop: 40 }}
+        style={{
+        flex: 1,
+        backgroundColor: color.background,
+        paddingTop: insets.top,
+      }}
       >
+        <GoBack />
         {/* Header */}
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
             padding: 20,
+            paddingTop: 16,
             borderBottomWidth: 0,
             backgroundColor: color.background,
           }}
         >
-          <GoBack
-            style={{
-              position: "absolute",
-              left: 20,
-              top: 25,
-            }}
-          />
-
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text
               style={{
                 fontSize: 18,
-                marginTop: 10,
                 fontFamily: FontFamily.bold,
                 textAlign: "center",
                 color: color.darkText,
@@ -383,26 +382,24 @@ export default function FavoritesScreen() {
 
   return (
     <View
-      style={{ flex: 1, backgroundColor: color.background, paddingTop: 40 }}
+      style={{
+        flex: 1,
+        backgroundColor: color.background,
+        paddingTop: insets.top,
+      }}
     >
+      <GoBack />
       {/* Header */}
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
           padding: 20,
+          paddingTop: 16,
           borderBottomWidth: 0,
           backgroundColor: color.background,
         }}
       >
-        <GoBack
-          style={{
-            position: "absolute",
-            left: 20,
-            top: 25,
-          }}
-        />
-
         <View style={{ flex: 1, alignItems: "center" }}>
           <Text
             style={{

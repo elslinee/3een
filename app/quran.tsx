@@ -30,6 +30,7 @@ import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import AppLogo from "@/components/AppLogo";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const isSmallScreen = width < 380;
@@ -192,6 +193,7 @@ export default function QuranScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [isReversed, setIsReversed] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -528,13 +530,14 @@ export default function QuranScreen() {
     <View
       style={[
         styles.container,
-        { backgroundColor: color.background, paddingTop: 50 },
+        { backgroundColor: color.background, paddingTop: insets.top },
       ]}
     >
+      <GoBack />
       <View
         style={{
           padding: 20,
-          paddingTop: 10,
+          paddingTop: 16,
           borderBottomWidth: 0,
           borderBottomColor: color.border,
           display: "flex",
@@ -543,13 +546,6 @@ export default function QuranScreen() {
           alignItems: "center",
         }}
       >
-        <GoBack
-          style={{
-            position: "absolute",
-            left: 20,
-            top: 20,
-          }}
-        />
         <Text style={[styles.headerTitle, { color: color.darkText }]}>
           سور القرآن الكريم
         </Text>

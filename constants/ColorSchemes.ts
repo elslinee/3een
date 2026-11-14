@@ -1,5 +1,13 @@
 // constants/ColorSchemes.ts
-export type ColorSchemeType = "warm" | "ocean" | "nature" | "purple" | "sunset";
+export type ColorSchemeType =
+  | "warm"
+  | "ocean"
+  | "nature"
+  | "purple"
+  | "sunset"
+  | "rose"
+  | "teal"
+  | "indigo";
 
 export interface ColorPalette {
   primary: string;
@@ -130,12 +138,81 @@ const sunsetScheme: ColorScheme = {
   },
 };
 
+// نمط 6: الوردي الهادئ (Dusty Rose)
+const roseScheme: ColorScheme = {
+  name: "rose",
+  nameAr: "وردي",
+  light: {
+    primary: "#A85A6B",
+    primary20: "#F2DDE1",
+    text20: "#C99AA4",
+    bg20: "#FAF0F2",
+    darkText: "#6E3442",
+    focusColor: "#C77D8C",
+  },
+  dark: {
+    primary: "#C77D8C",
+    primary20: "#3A242A",
+    text20: "#8F6670",
+    bg20: "#2E1F23",
+    darkText: "#EDD3D9",
+    focusColor: "#A85A6B",
+  },
+};
+
+// نمط 7: الفيروزي الهادئ
+const tealScheme: ColorScheme = {
+  name: "teal",
+  nameAr: "فيروزي",
+  light: {
+    primary: "#367873",
+    primary20: "#D3E8E5",
+    text20: "#86AEA9",
+    bg20: "#EBF5F3",
+    darkText: "#1F4D49",
+    focusColor: "#4F938C",
+  },
+  dark: {
+    primary: "#5FA69D",
+    primary20: "#1C3330",
+    text20: "#5F8783",
+    bg20: "#1B2B29",
+    darkText: "#C6E3DF",
+    focusColor: "#367873",
+  },
+};
+
+// نمط 8: النيلي
+const indigoScheme: ColorScheme = {
+  name: "indigo",
+  nameAr: "نيلي",
+  light: {
+    primary: "#56629E",
+    primary20: "#DCDFEF",
+    text20: "#9AA1C6",
+    bg20: "#EFF0F8",
+    darkText: "#343D6B",
+    focusColor: "#7380BA",
+  },
+  dark: {
+    primary: "#8592CC",
+    primary20: "#262B40",
+    text20: "#666E96",
+    bg20: "#202433",
+    darkText: "#D3D8EE",
+    focusColor: "#56629E",
+  },
+};
+
 export const ColorSchemes: Record<ColorSchemeType, ColorScheme> = {
   warm: warmScheme,
   ocean: oceanScheme,
   nature: natureScheme,
   purple: purpleScheme,
   sunset: sunsetScheme,
+  rose: roseScheme,
+  teal: tealScheme,
+  indigo: indigoScheme,
 };
 
 export const ColorSchemesList: ColorSchemeType[] = [
@@ -144,4 +221,7 @@ export const ColorSchemesList: ColorSchemeType[] = [
   "nature",
   "purple",
   "sunset",
+  "rose",
+  "teal",
+  "indigo",
 ];

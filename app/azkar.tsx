@@ -12,6 +12,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { FontFamily } from "@/constants/FontFamily";
 import GoBack from "@/components/GoBack";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const isSmallScreen = width < 380;
@@ -102,6 +103,7 @@ export default function AzkarScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const handleCategoryPress = (category: string) => {
     router.push({
@@ -111,15 +113,14 @@ export default function AzkarScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: color.background }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: color.background, paddingTop: insets.top },
+      ]}
+    >
+      <GoBack />
       <View style={styles.header}>
-        <GoBack
-          style={{
-            position: "absolute",
-            left: 20,
-            top: 40,
-          }}
-        />
         <Text style={[styles.headerTitle, { color: color.darkText }]}>
           الأذكار اليومية
         </Text>
@@ -281,11 +282,10 @@ export default function AzkarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
   },
   header: {
     padding: 20,
-    paddingTop: 20,
+    paddingTop: 16,
     paddingBottom: 20,
     flexDirection: "column",
     justifyContent: "center",

@@ -1,4 +1,5 @@
-export const APP_VERSION = "1.4.0";
+export const APP_VERSION = "1.5.0";
+export const ANDROID_PACKAGE = "com.elsline.een";
 export const APP_NAME = "عين";
 export const APP_AUTHOR = "Elsline";
 export const APP_AUTHOR_EMAIL = "info@elsline.com";

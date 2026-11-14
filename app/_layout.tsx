@@ -19,6 +19,9 @@ import usePushNotifications from "@/utils/usePushNotifications";
 import * as Notifications from "expo-notifications";
 import useAppUpdates from "@/utils/useAppUpdates";
 import UpdateModal from "@/components/UpdateModal";
+import ExactAlarmPrompt from "@/components/ExactAlarmPrompt";
+import StoreUpdatePrompt from "@/components/StoreUpdatePrompt";
+import usePrayerNotificationScheduler from "@/hooks/usePrayerNotificationScheduler";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -63,6 +66,8 @@ function RootLayoutNav() {
 
   // Check for app updates
   const { showUpdateModal, handleRestart, handleLater } = useAppUpdates();
+
+  usePrayerNotificationScheduler();
 
   // Handle notification tap
   usePushNotifications({
@@ -179,6 +184,55 @@ function RootLayoutNav() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="hadith/index"
+          options={{
+            title: "مكتبة الحديث",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="hadith/search"
+          options={{
+            title: "البحث في الأحاديث",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="hadith/favorites"
+          options={{
+            title: "المفضلة",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="hadith/[book]/index"
+          options={{
+            title: "الكتاب",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="hadith/[book]/[section]"
+          options={{
+            title: "الباب",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="hadith/[book]/hadith/[number]"
+          options={{
+            title: "الحديث",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="select-location"
+          options={{
+            title: "اختيار الموقع",
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       {/* Update Modal */}
@@ -187,6 +241,8 @@ function RootLayoutNav() {
         onRestart={handleRestart}
         onLater={handleLater}
       />
+      <ExactAlarmPrompt color={Colors[theme]} />
+      <StoreUpdatePrompt color={Colors[theme]} />
     </SafeAreaView>
   );
 }

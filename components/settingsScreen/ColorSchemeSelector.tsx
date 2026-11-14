@@ -56,9 +56,10 @@ export const ColorSchemeSelector: React.FC<ColorSchemeSelectorProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "center",
-    gap: 16,
+    gap: 14,
     paddingVertical: 8,
   },
   colorButton: {

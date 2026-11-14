@@ -7,12 +7,11 @@ import ScreenBtn from "@/components/homeScreen/ScreenBtn";
 import { QuranIcon, AzkarIcon, BookIcon, CompassIcon } from "@/constants/Icons";
 import { navigateToPage } from "@/utils/navigationUtils";
 import ChangelogModal from "@/components/ChangelogModal";
-import NewUpdateModal from "@/components/NewUpdateModal";
 
 export default function HomeScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
-  const CHANGELOG_KEY = "app_changelog_shown_v9";
+  const CHANGELOG_KEY = "app_changelog_shown_v10";
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: color.background }}>
@@ -70,20 +69,19 @@ export default function HomeScreen() {
               title="القبلة"
               Icon={CompassIcon}
               onPress={() => navigateToPage("/qibla")}
-              newTab={true}
+         
             />
             <ScreenBtn
               style={{
                 flex: 1,
-                pointerEvents: "none",
               }}
               iconWidth={45}
               iconHeight={45}
               color={color}
               title="المكتبة"
               Icon={BookIcon}
-              onPress={() => ""}
-              soon={true}
+              newTab={true}
+              onPress={() => navigateToPage("/hadith")}
             />
           </View>
         </View>
@@ -92,27 +90,14 @@ export default function HomeScreen() {
       {/* First-run changelog modal */}
       <ChangelogModal
         changelogKey={CHANGELOG_KEY}
-        version="الإصدار 1.4.0"
+        version="الإصدار 1.5.0"
         title="آخر التغييرات"
         changes={[
-          "إطلاق ميزة تحديد اتجاه القبلة بتصميم بوصلة احترافية وفخمة",
-          "تحسين كبير في استجابة تحديد الموقع (GPS) وسرعة الحصول على الاحداثيات",
-          "عرض الاتجاهات الأربعة والفرعية ودرجات الزوايا بدقة عالية على البوصلة",
-          "تحسينات عامة في الأداء واستقرار التطبيق",
+          "مكتبة الحديث الشريف: الصحيحان والسنن الأربعة وموطأ مالك مع البحث والأحكام والمفضلة",
+          "إشعارات الصلاة تصل في وقتها بدقة حتى دون فتح التطبيق",
+          "اختيار الموقع يدويًا بالبحث عن أي مدينة في العالم",
+          "ثلاثة أنماط ألوان جديدة وشاشة بداية داكنة",
         ]}
-        color={color}
-      />
-
-      {/* New Store Update Available Modal */}
-      <NewUpdateModal
-        latestVersion="1.4.0"
-        changes={[
-          "إطلاق ميزة تحديد اتجاه القبلة بتصميم بوصلة احترافية وفخمة",
-          "تحسين كبير في استجابة تحديد الموقع (GPS) وسرعة الحصول على الاحداثيات",
-          "عرض الاتجاهات الأربعة والفرعية ودرجات الزوايا بدقة عالية على البوصلة",
-          "تحسينات عامة في الأداء واستقرار التطبيق",
-        ]}
-        storeUrl="https://play.google.com/store/apps/details?id=com.elsline.een"
         color={color}
       />
     </ScrollView>

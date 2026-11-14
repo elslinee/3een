@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext } from "react";
 import { useColorScheme as useRNColorScheme } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ColorSchemeType, ColorSchemesList } from "@/constants/ColorSchemes";
+import { setAppNightMode } from "@/modules/prayer-alarms";
 
 export type ThemeMode = "auto" | "light" | "dark";
 export type Theme = "light" | "dark";
@@ -80,6 +81,13 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     };
     loadSettings();
   }, []);
+
+  // Keep the system splash screen in sync with the chosen theme (applies on next launch)
+  useEffect(() => {
+    if (isReady) {
+      setAppNightMode(themeMode);
+    }
+  }, [themeMode, isReady]);
 
   const setThemeMode = async (mode: ThemeMode) => {
     setThemeModeState(mode);

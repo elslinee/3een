@@ -24,6 +24,7 @@ import { useViewMode } from "@/hooks/useViewMode";
 import { Ayah } from "@/components/quranScreen/types";
 import { FontFamily } from "@/constants/FontFamily";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export function SurahScreenContent() {
   const { theme, colorScheme } = useTheme();
@@ -43,7 +44,8 @@ export function SurahScreenContent() {
   const scrollViewRef = useRef<ScrollView>(null);
   const contentRef = useRef<SurahContentHandle>(null);
 
-  const styles = createStyles(color, fontSize);
+  const insets = useSafeAreaInsets();
+  const styles = createStyles(color, fontSize, insets.top);
 
   const handleAyahPress = (ayah: Ayah) => {
     setSelectedAyah(ayah);
@@ -88,7 +90,7 @@ export function SurahScreenContent() {
         visible={showFontSizePopup}
         onClose={() => setShowFontSizePopup(false)}
       />
-      <GoBack style={styles.goBackButton} />
+      <GoBack />
       <View style={styles.headerContainer}>
         <View style={styles.headerContent}>
           <SurahHeader surahData={surahData} color={color} />
@@ -216,23 +218,18 @@ export function SurahScreenContent() {
   );
 }
 
-const createStyles = (color: any, fontSize: number) =>
+const createStyles = (color: any, fontSize: number, insetsTop: number) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: color.background,
-      paddingTop: 16,
-    },
-    goBackButton: {
-      position: "absolute",
-      top: 65,
-      left: 20,
-      zIndex: 1000,
+      paddingTop: insetsTop,
     },
     headerContainer: {
       flexDirection: "row",
       alignItems: "center",
       padding: 20,
+      paddingTop: 0,
       borderBottomWidth: 0,
       backgroundColor: color.background,
     },

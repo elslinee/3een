@@ -17,6 +17,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { getColors } from "@/constants/Colors";
 import { FontFamily } from "@/constants/FontFamily";
 import GoBack from "@/components/GoBack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTasbeehItem } from "@/hooks/useTasbeehItem";
 import { useSound } from "@/hooks/useSound";
 import {
@@ -33,6 +34,7 @@ export default function TasbeehDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { theme, colorScheme } = useTheme();
   const themeColors = getColors(theme, colorScheme)[theme];
+  const insets = useSafeAreaInsets();
   const { item, setItem, persist } = useTasbeehItem(id);
   const { soundEnabled, toggleSound, playTapSound } = useSound();
 
@@ -321,7 +323,14 @@ export default function TasbeehDetail() {
           backgroundColor: themeColors.background,
         }}
       >
-        <View style={{ position: "absolute", top: 12, right: 12, zIndex: 10 }}>
+        <View
+          style={{
+            position: "absolute",
+            top: insets.top + 16,
+            right: 12,
+            zIndex: 10,
+          }}
+        >
           <Pressable
             onPress={reset}
             android_ripple={{ color: themeColors.primary20 }}
@@ -363,17 +372,10 @@ export default function TasbeehDetail() {
       style={{
         flex: 1,
         backgroundColor: themeColors.background,
-        paddingTop: 65,
+        paddingTop: insets.top + 11,
       }}
     >
-      <GoBack
-        style={{
-          position: "absolute",
-          left: 20,
-          top: 70,
-          zIndex: 10,
-        }}
-      />
+      <GoBack />
       <View
         style={{
           justifyContent: "space-between",

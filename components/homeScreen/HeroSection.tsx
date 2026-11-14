@@ -10,8 +10,9 @@ import { Colors } from "@/constants/Colors";
 import { FontFamily } from "@/constants/FontFamily";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocation } from "@/context/LocationContext";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { getHijriDateString } from "@/utils/hijriDateUtils";
+import { navigateToPage } from "@/utils/navigationUtils";
 
 const { width } = Dimensions.get("window");
 
@@ -112,7 +113,6 @@ export default function HeroSection({ color }: HeroSectionProps) {
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
             >
-              <EvilIcons name="location" size={24} color={color.darkText} />
               {errorMsg ? (
                 <TouchableOpacity onPress={openLocationSettingsAndRefresh}>
                   <Text
@@ -137,6 +137,16 @@ export default function HeroSection({ color }: HeroSectionProps) {
                   {address}
                 </Text>
               )}
+              <TouchableOpacity
+                onPress={() => navigateToPage("/select-location")}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <MaterialIcons
+                  name="edit-location-alt"
+                  size={18}
+                  color={color.darkText}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>

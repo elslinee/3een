@@ -1,7 +1,15 @@
 import { router } from "expo-router";
 
 export const navigateToPage = (
-  route: "/quran" | "/about" | "/tasbeeh" | "/changelog" | "/azkar" | "/qibla"
+  route:
+    | "/quran"
+    | "/about"
+    | "/tasbeeh"
+    | "/changelog"
+    | "/azkar"
+    | "/qibla"
+    | "/select-location"
+    | "/hadith"
 ) => {
   router.push(route);
 };

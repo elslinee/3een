@@ -35,12 +35,12 @@ export const usePrayerTimesService = () => {
     };
   }, [location]);
 
-  // Refresh when app comes to foreground to keep times fresh without prompts
+  // On foreground, refetch only if the day or location changed since the last fetch
   useEffect(() => {
     const service = PrayerTimesService.getInstance();
     const sub = AppState.addEventListener("change", (state) => {
       if (state === "active") {
-        service.getPrayerTimesPreferCachedThenRefresh();
+        service.refreshIfStale();
       }
     });
     return () => {

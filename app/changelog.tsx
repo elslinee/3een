@@ -19,7 +19,7 @@ export default function ChangelogScreen() {
       style={[styles.container, { backgroundColor: color.background }]}
       showsVerticalScrollIndicator={false}
     >
-      <GoBack style={{ position: "absolute", left: 20, top: 60, zIndex: 1 }} />
+      <GoBack />
 
       <ChangelogHeader
         title="سجل التغييرات"

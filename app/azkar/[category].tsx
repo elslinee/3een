@@ -15,6 +15,7 @@ import { FontFamily } from "@/constants/FontFamily";
 import GoBack from "@/components/GoBack";
 import { useState, useEffect } from "react";
 import AzkarSwiper from "@/components/azkarScreen/AzkarSwiper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Zikr = {
   category: string;
@@ -31,6 +32,7 @@ export default function AzkarCategoryScreen() {
   const color = getColors(theme, colorScheme)[theme];
   const params = useLocalSearchParams();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const category = params.category as string;
 
   const [azkar, setAzkar] = useState<Zikr[]>([]);
@@ -104,15 +106,8 @@ export default function AzkarCategoryScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: color.background }]}>
-      <GoBack
-        style={{
-          position: "absolute",
-          left: 20,
-          top: 70,
-          zIndex: 1000,
-        }}
-      />
-      <View style={styles.header}>
+      <GoBack />
+      <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
         <Text style={[styles.headerTitle, { color: color.darkText }]}>
           {category}
         </Text>
@@ -129,7 +124,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 70,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

@@ -21,6 +21,7 @@ import {
   APP_AUTHOR_LINKEDIN,
 } from "@/constants/General";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // أيقونة المميزات
 const FeatureIcon = ({ color }: { color: string }) => (
@@ -35,6 +36,7 @@ const FeatureIcon = ({ color }: { color: string }) => (
 export default function AboutScreen() {
   const { theme, colorScheme } = useTheme();
   const color = getColors(theme, colorScheme)[theme];
+  const insets = useSafeAreaInsets();
 
   const features = [
     {
@@ -46,6 +48,11 @@ export default function AboutScreen() {
       title: "القرآن الكريم الكامل",
       description:
         "تصفح جميع السور مع البحث الفوري والإشارات المرجعية والمشاركة",
+    },
+    {
+      title: "مكتبة الحديث الشريف",
+      description:
+        "الصحيحان والسنن الأربعة وموطأ مالك بأكثر من 36 ألف حديث، مع البحث في النصوص وأحكام العلماء والقراءة بدون إنترنت",
     },
     {
       title: "التسبيح الذكي",
@@ -70,7 +77,7 @@ export default function AboutScreen() {
     {
       title: "أنماط ألوان متعددة",
       description:
-        "اختر من بين 3 أنماط ألوان جميلة مع دعم الوضع الداكن والفاتح",
+        "اختر من بين 8 أنماط ألوان جميلة مع دعم الوضع الداكن والفاتح",
     },
     {
       title: "واجهة عربية أنيقة",
@@ -91,13 +98,16 @@ export default function AboutScreen() {
       style={[styles.container, { backgroundColor: color.background }]}
       showsVerticalScrollIndicator={false}
     >
-      <GoBack style={{ position: "absolute", left: 20, top: 60, zIndex: 1 }} />
+      <GoBack />
 
       {/* Header with Logo */}
       <View
         style={[
           styles.header,
-          { backgroundColor: `${color.primary}15`, paddingTop: 80 },
+          {
+            backgroundColor: `${color.primary}15`,
+            paddingTop: insets.top + 36,
+          },
         ]}
       >
         <View style={{ alignItems: "center", justifyContent: "center" }}>
@@ -234,7 +244,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: 60,
     paddingBottom: 32,
     paddingHorizontal: 20,
     alignItems: "center",

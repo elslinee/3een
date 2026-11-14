@@ -57,7 +57,14 @@ export default function CountdownTimer({ color }: { color: any }) {
           alignItems: "center",
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 4,
+            marginTop: 12,
+          }}
+        >
           <EvilIcons name="location" size={24} color={color.grey} />
           {errorMsg ? (
             <TouchableOpacity onPress={openLocationSettingsAndRefresh}>

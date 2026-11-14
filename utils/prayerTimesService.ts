@@ -127,9 +127,13 @@ class PrayerTimesService {
     this.listeners.forEach((listener) => listener(data, loading, error));
   }
 
-  // Get current date in YYYY-MM-DD format
+  // Get current date in YYYY-MM-DD format, in the device's local time
+  // (toISOString would give the UTC date, which flips at the wrong hour outside UTC)
   private getCurrentDateString(): string {
-    return new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${now.getFullYear()}-${month}-${day}`;
   }
 
   // Check if cached data is still valid
@@ -408,6 +412,20 @@ class PrayerTimesService {
       console.error("Error prefer-cached-then-refresh:", error);
       return this.cache?.data || null;
     }
+  }
+
+  // Cheap check for app-foreground events: only hit the API when the cached
+  // times are from another day or the saved location has moved.
+  async refreshIfStale(): Promise<PrayerTimesData | null> {
+    const cached = await this.loadAnyCachedData();
+    if (cached && this.isCacheValid(cached)) {
+      this.cache = cached;
+      const savedLoc = await this.getSavedLocationFromStorage();
+      if (!savedLoc || !this.hasLocationChanged(savedLoc)) {
+        return cached.data;
+      }
+    }
+    return this.getPrayerTimesPreferCachedThenRefresh();
   }
 
   // Force refresh prayer times

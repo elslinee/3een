@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { usePrayerTimes } from "@/context/PrayerTimesContext";
 import {
@@ -12,7 +12,6 @@ import {
 } from "@/constants/Icons";
 import { formatTo12Hour } from "@/utils/formatTo12Hour";
 import getNextPrayerTime from "@/utils/getNextPrayerTime";
-import usePrayerNotifications from "@/utils/usePrayerNotifications";
 import { FontFamily } from "@/constants/FontFamily";
 
 export default function AladhanVoice({ color }: { color: any }) {
@@ -134,18 +133,6 @@ export default function AladhanVoice({ color }: { color: any }) {
       }
     }
   }, [prayerTimes?.date?.gregorian?.date, isFriday]);
-
-  // Map UI toggles to hook include map per prayer
-  const includeMap = useMemo(() => {
-    const map: any = {};
-    PRAYER_KEYS.forEach((k) => {
-      map[k] = true;
-    });
-    return map;
-  }, []);
-
-  // Schedule notifications according to toggles
-  usePrayerNotifications(prayerTimes, { enabled: true, include: includeMap });
 
   // Get next prayer info
   const nextPrayerInfo = prayerTimes?.timings

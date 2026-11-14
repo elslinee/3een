@@ -1,96 +1,38 @@
-// hooks/usePushNotifications.ts
-import { useEffect, useRef, useState } from "react";
-import { Platform } from "react-native";
+import { useEffect, useRef } from "react";
 import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
-// import { Audio } from "expo-av"; // Removed - no longer needed
 
 Notifications.setNotificationHandler({
-  handleNotification: async (notification) => {
-    // Check if this is a prayer notification
-    const isPrayerNotification =
-      notification.request.content.data?.type === "prayer";
-
-    // No custom sound for prayer notifications
-
-    return {
-      shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
-      shouldShowBanner: true,
-      shouldShowList: true,
-    };
-  },
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+    shouldShowBanner: true,
+    shouldShowList: true,
+  }),
 });
 
 interface UsePushNotificationsOptions {
   onNotificationResponse?: (
-    response: Notifications.NotificationResponse
+    response: Notifications.NotificationResponse,
   ) => void;
 }
 
+// Notification permission and the Android channel are set up by
+// prayerNotificationScheduler; this hook only listens for taps.
 export default function usePushNotifications(
-  options?: UsePushNotificationsOptions
+  options?: UsePushNotificationsOptions,
 ) {
-  const [expoPushToken, setExpoPushToken] = useState<string | null>(null);
-  const notificationListener = useRef<any>(null);
-  const responseListener = useRef<any>(null);
-
-  const registerForPushNotificationsAsync = async () => {
-    if (!Device.isDevice) {
-      return null;
-    }
-
-    const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-    let finalStatus = existingStatus;
-
-    if (existingStatus !== "granted") {
-      const { status } = await Notifications.requestPermissionsAsync();
-      finalStatus = status;
-    }
-
-    if (finalStatus !== "granted") {
-      return null;
-    }
-
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        sound: "default",
-      });
-    }
-
-    const token = (await Notifications.getExpoPushTokenAsync()).data;
-    return token;
-  };
+  // Callers pass a fresh object every render; read the latest callback through a ref
+  // so the listener is registered once instead of on every render.
+  const onResponseRef = useRef(options?.onNotificationResponse);
+  onResponseRef.current = options?.onNotificationResponse;
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
-
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {});
-
-    responseListener.current =
+    const responseListener =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        if (options?.onNotificationResponse) {
-          options.onNotificationResponse(response);
-        }
+        onResponseRef.current?.(response);
       });
 
-    return () => {
-      if (notificationListener.current) {
-        notificationListener.current.remove();
-      }
-      if (responseListener.current) {
-        responseListener.current.remove();
-      }
-    };
-  }, [options]);
-
-  return expoPushToken;
+    return () => responseListener.remove();
+  }, []);
 }

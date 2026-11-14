@@ -14,10 +14,12 @@ import { useCompass } from "@/hooks/useCompass";
 import { calculateQibla } from "@/utils/qibla";
 import { QiblaView } from "@/components/QiblaView";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function QiblaScreen() {
   const { theme, colorScheme } = useTheme();
   const colors = getColors(theme, colorScheme)[theme];
+  const insets = useSafeAreaInsets();
   const { heading, location, errorMsg } = useCompass();
 
   const qiblaBearing = useMemo(() => {
@@ -37,15 +39,14 @@ export default function QiblaScreen() {
   }, [heading, qiblaBearing]);
   // const isAligned = true;
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: colors.background, paddingTop: insets.top },
+      ]}
+    >
+      <GoBack />
       <View style={styles.header}>
-        <GoBack
-          style={{
-            position: "absolute",
-            left: 20,
-            top: 40,
-          }}
-        />
         <Text style={[styles.headerTitle, { color: colors.darkText }]}>
           القبلة
         </Text>
@@ -157,11 +158,10 @@ export default function QiblaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
   },
   header: {
     padding: 20,
-    paddingTop: 10,
+    paddingTop: 16,
     paddingBottom: 20,
     flexDirection: "column",
     justifyContent: "center",

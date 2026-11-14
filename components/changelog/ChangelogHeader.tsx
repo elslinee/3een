@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { FontFamily } from "@/constants/FontFamily";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface ChangelogHeaderProps {
   title: string;
@@ -13,11 +14,16 @@ export const ChangelogHeader: React.FC<ChangelogHeaderProps> = ({
   subtitle,
   color,
 }) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <View
       style={[
         styles.header,
-        { backgroundColor: `${color.primary}15`, paddingTop: 80 },
+        {
+          backgroundColor: `${color.primary}15`,
+          paddingTop: insets.top + 36,
+        },
       ]}
     >
       <Text style={[styles.headerTitle, { color: color.text }]}>{title}</Text>
@@ -30,7 +36,6 @@ export const ChangelogHeader: React.FC<ChangelogHeaderProps> = ({
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 40,
     paddingBottom: 32,
     paddingHorizontal: 20,
     alignItems: "center",

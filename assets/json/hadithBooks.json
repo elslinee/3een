@@ -1,0 +1,2851 @@
+[
+  {
+    "key": "bukhari",
+    "edition": "ara-bukhari",
+    "title": "صحيح البخاري",
+    "author": "الإمام محمد بن إسماعيل البخاري",
+    "group": "sahihain",
+    "hadithCount": 7589,
+    "hasGrades": false,
+    "sections": [
+      {
+        "number": 1,
+        "title": "كتاب بدء الوحى",
+        "first": 1,
+        "last": 7,
+        "count": 7
+      },
+      {
+        "number": 2,
+        "title": "كتاب الإيمان",
+        "first": 8,
+        "last": 58,
+        "count": 51
+      },
+      {
+        "number": 3,
+        "title": "كتاب العلم",
+        "first": 59,
+        "last": 134,
+        "count": 76
+      },
+      {
+        "number": 4,
+        "title": "كتاب الوضوء",
+        "first": 135,
+        "last": 247,
+        "count": 113
+      },
+      {
+        "number": 5,
+        "title": "كتاب الغسل",
+        "first": 248,
+        "last": 293,
+        "count": 46
+      },
+      {
+        "number": 6,
+        "title": "كتاب الحيض",
+        "first": 294,
+        "last": 333,
+        "count": 40
+      },
+      {
+        "number": 7,
+        "title": "كتاب التيمم",
+        "first": 334,
+        "last": 348,
+        "count": 15
+      },
+      {
+        "number": 8,
+        "title": "كتاب الصلاة",
+        "first": 349,
+        "last": 521,
+        "count": 174
+      },
+      {
+        "number": 9,
+        "title": "كتاب مواقيت الصلاة",
+        "first": 522,
+        "last": 602,
+        "count": 81
+      },
+      {
+        "number": 10,
+        "title": "كتاب الأذان",
+        "first": 603,
+        "last": 875,
+        "count": 275
+      },
+      {
+        "number": 11,
+        "title": "كتاب الجمعة",
+        "first": 876,
+        "last": 941,
+        "count": 66
+      },
+      {
+        "number": 12,
+        "title": "كتاب صلاة الخوف",
+        "first": 942,
+        "last": 947,
+        "count": 6
+      },
+      {
+        "number": 13,
+        "title": "كتاب العيدين",
+        "first": 948,
+        "last": 989,
+        "count": 42
+      },
+      {
+        "number": 14,
+        "title": "كتاب الوتر",
+        "first": 990,
+        "last": 1004,
+        "count": 15
+      },
+      {
+        "number": 15,
+        "title": "كتاب الاستسقاء",
+        "first": 1005,
+        "last": 1039,
+        "count": 35
+      },
+      {
+        "number": 16,
+        "title": "كتاب الكسوف",
+        "first": 1040,
+        "last": 1066,
+        "count": 27
+      },
+      {
+        "number": 17,
+        "title": "كتاب سجود القرآن",
+        "first": 1067,
+        "last": 1079,
+        "count": 13
+      },
+      {
+        "number": 18,
+        "title": "كتاب التقصير",
+        "first": 1080,
+        "last": 1119,
+        "count": 40
+      },
+      {
+        "number": 19,
+        "title": "كتاب التهجد",
+        "first": 1120,
+        "last": 1187,
+        "count": 69
+      },
+      {
+        "number": 20,
+        "title": "كتاب فضل الصلاة فى مسجد مكة والمدينة",
+        "first": 1188,
+        "last": 1197,
+        "count": 10
+      },
+      {
+        "number": 21,
+        "title": "كتاب العمل فى الصلاة",
+        "first": 1198,
+        "last": 1223,
+        "count": 27
+      },
+      {
+        "number": 22,
+        "title": "كتاب السهو",
+        "first": 1224,
+        "last": 1236,
+        "count": 14
+      },
+      {
+        "number": 23,
+        "title": "كتاب الجنائز",
+        "first": 1237,
+        "last": 1394,
+        "count": 160
+      },
+      {
+        "number": 24,
+        "title": "كتاب الزكاة",
+        "first": 1395,
+        "last": 1512,
+        "count": 118
+      },
+      {
+        "number": 25,
+        "title": "كتاب الحج",
+        "first": 1513,
+        "last": 1772,
+        "count": 260
+      },
+      {
+        "number": 26,
+        "title": "كتاب العمرة",
+        "first": 1773,
+        "last": 1805,
+        "count": 33
+      },
+      {
+        "number": 27,
+        "title": "كتاب المحصر",
+        "first": 1806,
+        "last": 1820,
+        "count": 15
+      },
+      {
+        "number": 28,
+        "title": "كتاب جزاء الصيد",
+        "first": 1821,
+        "last": 1866,
+        "count": 46
+      },
+      {
+        "number": 29,
+        "title": "كتاب فضائل المدينة",
+        "first": 1867,
+        "last": 1890,
+        "count": 24
+      },
+      {
+        "number": 30,
+        "title": "كتاب الصوم",
+        "first": 1891,
+        "last": 2007,
+        "count": 117
+      },
+      {
+        "number": 31,
+        "title": "كتاب صلاة التراويح",
+        "first": 2008,
+        "last": 2013,
+        "count": 6
+      },
+      {
+        "number": 32,
+        "title": "كتاب فضل ليلة القدر",
+        "first": 2014,
+        "last": 2024,
+        "count": 11
+      },
+      {
+        "number": 33,
+        "title": "كتاب الاعتكاف",
+        "first": 2025,
+        "last": 2046,
+        "count": 22
+      },
+      {
+        "number": 34,
+        "title": "كتاب البيوع",
+        "first": 2047,
+        "last": 2238,
+        "count": 193
+      },
+      {
+        "number": 35,
+        "title": "كتاب السلم",
+        "first": 2239,
+        "last": 2256,
+        "count": 20
+      },
+      {
+        "number": 36,
+        "title": "كتاب الشفعة",
+        "first": 2257,
+        "last": 2259,
+        "count": 3
+      },
+      {
+        "number": 37,
+        "title": "كتاب الإجارة",
+        "first": 2260,
+        "last": 2286,
+        "count": 27
+      },
+      {
+        "number": 38,
+        "title": "كتاب الحوالات",
+        "first": 2287,
+        "last": 2289,
+        "count": 3
+      },
+      {
+        "number": 39,
+        "title": "كتاب الكفالة",
+        "first": 2290,
+        "last": 2298,
+        "count": 9
+      },
+      {
+        "number": 40,
+        "title": "كتاب الوكالة",
+        "first": 2299,
+        "last": 2319,
+        "count": 21
+      },
+      {
+        "number": 41,
+        "title": "كتاب المزارعة",
+        "first": 2320,
+        "last": 2350,
+        "count": 31
+      },
+      {
+        "number": 42,
+        "title": "كتاب المساقاة",
+        "first": 2351,
+        "last": 2384,
+        "count": 34
+      },
+      {
+        "number": 43,
+        "title": "كتاب فى الاستقراض",
+        "first": 2385,
+        "last": 2409,
+        "count": 25
+      },
+      {
+        "number": 44,
+        "title": "كتاب الخصومات",
+        "first": 2410,
+        "last": 2425,
+        "count": 16
+      },
+      {
+        "number": 45,
+        "title": "كتاب فى اللقطة",
+        "first": 2426,
+        "last": 2439,
+        "count": 15
+      },
+      {
+        "number": 46,
+        "title": "كتاب المظالم",
+        "first": 2440,
+        "last": 2482,
+        "count": 43
+      },
+      {
+        "number": 47,
+        "title": "كتاب الشركة",
+        "first": 2483,
+        "last": 2507,
+        "count": 25
+      },
+      {
+        "number": 48,
+        "title": "كتاب الرهن",
+        "first": 2508,
+        "last": 2516,
+        "count": 9
+      },
+      {
+        "number": 49,
+        "title": "كتاب العتق",
+        "first": 2517,
+        "last": 2559,
+        "count": 43
+      },
+      {
+        "number": 50,
+        "title": "كتاب المكاتب",
+        "first": 2560,
+        "last": 2565,
+        "count": 6
+      },
+      {
+        "number": 51,
+        "title": "كتاب الهبة وفضلها والتحريض عليها",
+        "first": 2566,
+        "last": 2636,
+        "count": 71
+      },
+      {
+        "number": 52,
+        "title": "كتاب الشهادات",
+        "first": 2637,
+        "last": 2689,
+        "count": 53
+      },
+      {
+        "number": 53,
+        "title": "كتاب الصلح",
+        "first": 2690,
+        "last": 2711,
+        "count": 22
+      },
+      {
+        "number": 54,
+        "title": "كتاب الشروط",
+        "first": 2712,
+        "last": 2737,
+        "count": 26
+      },
+      {
+        "number": 55,
+        "title": "كتاب الوصايا",
+        "first": 2738,
+        "last": 2781,
+        "count": 44
+      },
+      {
+        "number": 56,
+        "title": "كتاب الجهاد والسير",
+        "first": 2782,
+        "last": 3090,
+        "count": 309
+      },
+      {
+        "number": 57,
+        "title": "كتاب فرض الخمس",
+        "first": 3091,
+        "last": 3156,
+        "count": 66
+      },
+      {
+        "number": 58,
+        "title": "كتاب الجزية والموادعة",
+        "first": 3157,
+        "last": 3189,
+        "count": 33
+      },
+      {
+        "number": 59,
+        "title": "كتاب بدء الخلق",
+        "first": 3190,
+        "last": 3325,
+        "count": 136
+      },
+      {
+        "number": 60,
+        "title": "كتاب أحاديث الأنبياء",
+        "first": 3326,
+        "last": 3488,
+        "count": 163
+      },
+      {
+        "number": 61,
+        "title": "كتاب المناقب",
+        "first": 3489,
+        "last": 3648,
+        "count": 162
+      },
+      {
+        "number": 62,
+        "title": "كتاب فضائل أصحاب النبى صلى الله عليه وسلم",
+        "first": 3649,
+        "last": 3775,
+        "count": 128
+      },
+      {
+        "number": 63,
+        "title": "كتاب مناقب الأنصار",
+        "first": 3776,
+        "last": 3948,
+        "count": 173
+      },
+      {
+        "number": 64,
+        "title": "كتاب المغازى",
+        "first": 3949,
+        "last": 4473,
+        "count": 526
+      },
+      {
+        "number": 65,
+        "title": "كتاب التفسير",
+        "first": 4474,
+        "last": 4978,
+        "count": 507
+      },
+      {
+        "number": 66,
+        "title": "كتاب فضائل القرآن",
+        "first": 4979,
+        "last": 5062,
+        "count": 87
+      },
+      {
+        "number": 67,
+        "title": "كتاب النكاح",
+        "first": 5063,
+        "last": 5250,
+        "count": 188
+      },
+      {
+        "number": 68,
+        "title": "كتاب الطلاق",
+        "first": 5251,
+        "last": 5350,
+        "count": 100
+      },
+      {
+        "number": 69,
+        "title": "كتاب النفقات",
+        "first": 5351,
+        "last": 5372,
+        "count": 22
+      },
+      {
+        "number": 70,
+        "title": "كتاب الأطعمة",
+        "first": 5373,
+        "last": 5466,
+        "count": 95
+      },
+      {
+        "number": 71,
+        "title": "كتاب العقيقة",
+        "first": 5467,
+        "last": 5474,
+        "count": 9
+      },
+      {
+        "number": 72,
+        "title": "كتاب الذبائح والصيد",
+        "first": 5475,
+        "last": 5544,
+        "count": 70
+      },
+      {
+        "number": 73,
+        "title": "كتاب الأضاحي",
+        "first": 5545,
+        "last": 5574,
+        "count": 30
+      },
+      {
+        "number": 74,
+        "title": "كتاب الأشربة",
+        "first": 5575,
+        "last": 5639,
+        "count": 65
+      },
+      {
+        "number": 75,
+        "title": "كتاب المرضى",
+        "first": 5640,
+        "last": 5677,
+        "count": 38
+      },
+      {
+        "number": 76,
+        "title": "كتاب الطب",
+        "first": 5678,
+        "last": 5782,
+        "count": 105
+      },
+      {
+        "number": 77,
+        "title": "كتاب اللباس",
+        "first": 5783,
+        "last": 5969,
+        "count": 188
+      },
+      {
+        "number": 78,
+        "title": "كتاب الأدب",
+        "first": 5970,
+        "last": 6226,
+        "count": 257
+      },
+      {
+        "number": 79,
+        "title": "كتاب الاستئذان",
+        "first": 6227,
+        "last": 6303,
+        "count": 77
+      },
+      {
+        "number": 80,
+        "title": "كتاب الدعوات",
+        "first": 6304,
+        "last": 6411,
+        "count": 108
+      },
+      {
+        "number": 81,
+        "title": "كتاب الرقاق",
+        "first": 6412,
+        "last": 6593,
+        "count": 182
+      },
+      {
+        "number": 82,
+        "title": "كتاب القدر",
+        "first": 6594,
+        "last": 6620,
+        "count": 27
+      },
+      {
+        "number": 83,
+        "title": "كتاب الأيمان والنذور",
+        "first": 6621,
+        "last": 6707,
+        "count": 87
+      },
+      {
+        "number": 84,
+        "title": "كتاب كفارات الأيمان",
+        "first": 6708,
+        "last": 6722,
+        "count": 15
+      },
+      {
+        "number": 85,
+        "title": "كتاب الفرائض",
+        "first": 6723,
+        "last": 6771,
+        "count": 49
+      },
+      {
+        "number": 86,
+        "title": "كتاب الحدود",
+        "first": 6772,
+        "last": 6860,
+        "count": 89
+      },
+      {
+        "number": 87,
+        "title": "كتاب الديات",
+        "first": 6861,
+        "last": 6917,
+        "count": 59
+      },
+      {
+        "number": 88,
+        "title": "كتاب استتابة المرتدين والمعاندين وقتالهم",
+        "first": 6918,
+        "last": 6939,
+        "count": 22
+      },
+      {
+        "number": 89,
+        "title": "كتاب الإكراه",
+        "first": 6940,
+        "last": 6952,
+        "count": 13
+      },
+      {
+        "number": 90,
+        "title": "كتاب الحيل",
+        "first": 6953,
+        "last": 6981,
+        "count": 29
+      },
+      {
+        "number": 91,
+        "title": "كتاب التعبير",
+        "first": 6982,
+        "last": 7047,
+        "count": 66
+      },
+      {
+        "number": 92,
+        "title": "كتاب الفتن",
+        "first": 7048,
+        "last": 7136,
+        "count": 89
+      },
+      {
+        "number": 93,
+        "title": "كتاب الأحكام",
+        "first": 7137,
+        "last": 7225,
+        "count": 89
+      },
+      {
+        "number": 94,
+        "title": "كتاب التمنى",
+        "first": 7226,
+        "last": 7245,
+        "count": 20
+      },
+      {
+        "number": 95,
+        "title": "كتاب أخبار الآحاد",
+        "first": 7246,
+        "last": 7267,
+        "count": 22
+      },
+      {
+        "number": 96,
+        "title": "كتاب الاعتصام بالكتاب والسنة",
+        "first": 7268,
+        "last": 7370,
+        "count": 103
+      },
+      {
+        "number": 97,
+        "title": "كتاب التوحيد",
+        "first": 7371,
+        "last": 7563,
+        "count": 193
+      }
+    ]
+  },
+  {
+    "key": "muslim",
+    "edition": "ara-muslim",
+    "title": "صحيح مسلم",
+    "author": "الإمام مسلم بن الحجاج القشيري النيسابوري",
+    "group": "sahihain",
+    "hadithCount": 7563,
+    "hasGrades": false,
+    "sections": [
+      {
+        "number": 0,
+        "title": "المقدمة",
+        "first": 1,
+        "last": 92,
+        "count": 92
+      },
+      {
+        "number": 1,
+        "title": "كتاب الإيمان",
+        "first": 93,
+        "last": 533,
+        "count": 439
+      },
+      {
+        "number": 2,
+        "title": "كتاب الطهارة",
+        "first": 534,
+        "last": 678,
+        "count": 145
+      },
+      {
+        "number": 3,
+        "title": "كتاب الحيض",
+        "first": 679,
+        "last": 836,
+        "count": 158
+      },
+      {
+        "number": 4,
+        "title": "كتاب الصلاة",
+        "first": 837,
+        "last": 1160,
+        "count": 324
+      },
+      {
+        "number": 5,
+        "title": "كتاب الْمَسَاجِدِ وَمَوَاضِعِ الصَّلاَةِ",
+        "first": 1161,
+        "last": 1569,
+        "count": 409
+      },
+      {
+        "number": 6,
+        "title": "كتاب صلاة المسافرين وقصرها",
+        "first": 1570,
+        "last": 1950,
+        "count": 381
+      },
+      {
+        "number": 7,
+        "title": "كتاب الجمعة",
+        "first": 1951,
+        "last": 2043,
+        "count": 93
+      },
+      {
+        "number": 8,
+        "title": "كتاب صلاة العيدين",
+        "first": 2044,
+        "last": 2069,
+        "count": 26
+      },
+      {
+        "number": 9,
+        "title": "كتاب صلاة الاستسقاء‏",
+        "first": 2070,
+        "last": 2088,
+        "count": 19
+      },
+      {
+        "number": 10,
+        "title": "كتاب الكسوف",
+        "first": 2089,
+        "last": 2122,
+        "count": 34
+      },
+      {
+        "number": 11,
+        "title": "كتاب الجنائز",
+        "first": 2123,
+        "last": 2262,
+        "count": 140
+      },
+      {
+        "number": 12,
+        "title": "كتاب الزكاة",
+        "first": 2263,
+        "last": 2494,
+        "count": 232
+      },
+      {
+        "number": 13,
+        "title": "كتاب الصيام",
+        "first": 2495,
+        "last": 2779,
+        "count": 285
+      },
+      {
+        "number": 14,
+        "title": "كتاب الاعتكاف",
+        "first": 2780,
+        "last": 2790,
+        "count": 11
+      },
+      {
+        "number": 15,
+        "title": "كتاب الحج",
+        "first": 2791,
+        "last": 3397,
+        "count": 607
+      },
+      {
+        "number": 16,
+        "title": "كتاب النكاح",
+        "first": 3398,
+        "last": 3567,
+        "count": 171
+      },
+      {
+        "number": 17,
+        "title": "كتاب الرضاع",
+        "first": 3568,
+        "last": 3651,
+        "count": 84
+      },
+      {
+        "number": 18,
+        "title": "كتاب الطلاق",
+        "first": 3652,
+        "last": 3742,
+        "count": 91
+      },
+      {
+        "number": 19,
+        "title": "كتاب اللعان",
+        "first": 3743,
+        "last": 3769,
+        "count": 27
+      },
+      {
+        "number": 20,
+        "title": "كتاب العتق",
+        "first": 3770,
+        "last": 3800,
+        "count": 31
+      },
+      {
+        "number": 21,
+        "title": "كتاب البيوع",
+        "first": 3801,
+        "last": 3961,
+        "count": 161
+      },
+      {
+        "number": 22,
+        "title": "كتاب المساقاة",
+        "first": 3962,
+        "last": 4139,
+        "count": 178
+      },
+      {
+        "number": 23,
+        "title": "كتاب الفرائض",
+        "first": 4140,
+        "last": 4162,
+        "count": 23
+      },
+      {
+        "number": 24,
+        "title": "كتاب الهبات",
+        "first": 4163,
+        "last": 4203,
+        "count": 41
+      },
+      {
+        "number": 25,
+        "title": "كتاب الوصية",
+        "first": 4204,
+        "last": 4234,
+        "count": 31
+      },
+      {
+        "number": 26,
+        "title": "كتاب النذر",
+        "first": 4235,
+        "last": 4253,
+        "count": 19
+      },
+      {
+        "number": 27,
+        "title": "كتاب الأيمان",
+        "first": 4254,
+        "last": 4341,
+        "count": 88
+      },
+      {
+        "number": 28,
+        "title": "كتاب القسامة والمحاربين والقصاص والديات",
+        "first": 4342,
+        "last": 4397,
+        "count": 56
+      },
+      {
+        "number": 29,
+        "title": "كتاب الحدود",
+        "first": 4398,
+        "last": 4469,
+        "count": 72
+      },
+      {
+        "number": 30,
+        "title": "كتاب الأقضية",
+        "first": 4470,
+        "last": 4497,
+        "count": 28
+      },
+      {
+        "number": 31,
+        "title": "كتاب اللقطة",
+        "first": 4498,
+        "last": 4518,
+        "count": 21
+      },
+      {
+        "number": 32,
+        "title": "كتاب الجهاد والسير",
+        "first": 4519,
+        "last": 4700,
+        "count": 182
+      },
+      {
+        "number": 33,
+        "title": "كتاب الإمارة",
+        "first": 4701,
+        "last": 4971,
+        "count": 271
+      },
+      {
+        "number": 34,
+        "title": "كتاب الصيد والذبائح وما يؤكل من الحيوان",
+        "first": 4972,
+        "last": 5063,
+        "count": 92
+      },
+      {
+        "number": 35,
+        "title": "كتاب الأضاحى",
+        "first": 5064,
+        "last": 5126,
+        "count": 61
+      },
+      {
+        "number": 36,
+        "title": "كتاب الأشربة",
+        "first": 5127,
+        "last": 5384,
+        "count": 260
+      },
+      {
+        "number": 37,
+        "title": "كتاب اللباس والزينة",
+        "first": 5385,
+        "last": 5585,
+        "count": 201
+      },
+      {
+        "number": 38,
+        "title": "كتاب الآداب",
+        "first": 5586,
+        "last": 5645,
+        "count": 60
+      },
+      {
+        "number": 39,
+        "title": "كتاب السلام",
+        "first": 5646,
+        "last": 5861,
+        "count": 216
+      },
+      {
+        "number": 40,
+        "title": "كتاب الألفاظ من الأدب وغيرها",
+        "first": 5862,
+        "last": 5886,
+        "count": 25
+      },
+      {
+        "number": 41,
+        "title": "كتاب الشعر",
+        "first": 5887,
+        "last": 5896,
+        "count": 10
+      },
+      {
+        "number": 42,
+        "title": "كتاب الرؤيا",
+        "first": 5897,
+        "last": 5937,
+        "count": 41
+      },
+      {
+        "number": 43,
+        "title": "كتاب الفضائل",
+        "first": 5938,
+        "last": 6168,
+        "count": 232
+      },
+      {
+        "number": 44,
+        "title": "كتاب فضائل الصحابة رضى الله تعالى عنهم",
+        "first": 6169,
+        "last": 6499,
+        "count": 331
+      },
+      {
+        "number": 45,
+        "title": "كتاب البر والصلة والآداب",
+        "first": 6500,
+        "last": 6722,
+        "count": 223
+      },
+      {
+        "number": 46,
+        "title": "كتاب القدر",
+        "first": 6723,
+        "last": 6774,
+        "count": 52
+      },
+      {
+        "number": 47,
+        "title": "كتاب العلم",
+        "first": 6775,
+        "last": 6804,
+        "count": 30
+      },
+      {
+        "number": 48,
+        "title": "كتاب الذكر والدعاء والتوبة والاستغفار",
+        "first": 6805,
+        "last": 6936,
+        "count": 132
+      },
+      {
+        "number": 49,
+        "title": "كتاب الرقاق",
+        "first": 6937,
+        "last": 6951,
+        "count": 15
+      },
+      {
+        "number": 50,
+        "title": "كتاب التوبة",
+        "first": 6952,
+        "last": 7023,
+        "count": 72
+      },
+      {
+        "number": 51,
+        "title": "كتاب صفات المنافقين وأحكامهم",
+        "first": 7024,
+        "last": 7044,
+        "count": 21
+      },
+      {
+        "number": 52,
+        "title": "كتاب صفة القيامة والجنة والنار",
+        "first": 7045,
+        "last": 7129,
+        "count": 85
+      },
+      {
+        "number": 53,
+        "title": "كتاب الجنة وصفة نعيمها وأهلها",
+        "first": 7130,
+        "last": 7234,
+        "count": 105
+      },
+      {
+        "number": 54,
+        "title": "كتاب الفتن وأشراط الساعة",
+        "first": 7235,
+        "last": 7416,
+        "count": 182
+      },
+      {
+        "number": 55,
+        "title": "كتاب الزهد والرقائق",
+        "first": 7417,
+        "last": 7522,
+        "count": 106
+      },
+      {
+        "number": 56,
+        "title": "كتاب التفسير",
+        "first": 7523,
+        "last": 7563,
+        "count": 41
+      }
+    ]
+  },
+  {
+    "key": "abudawud",
+    "edition": "ara-abudawud",
+    "title": "سنن أبي داود",
+    "author": "الإمام سليمان بن الأشعث أبو داود السجستاني",
+    "group": "sunan",
+    "hadithCount": 5274,
+    "hasGrades": true,
+    "sections": [
+      {
+        "number": 1,
+        "title": "كتاب الطهارة",
+        "first": 1,
+        "last": 390,
+        "count": 390
+      },
+      {
+        "number": 2,
+        "title": "كتاب الصلاة",
+        "first": 391,
+        "last": 1160,
+        "count": 770
+      },
+      {
+        "number": 3,
+        "title": "كتاب الاستسقاء",
+        "first": 1161,
+        "last": 1197,
+        "count": 37
+      },
+      {
+        "number": 4,
+        "title": "كتاب صلاة السفر",
+        "first": 1198,
+        "last": 1249,
+        "count": 52
+      },
+      {
+        "number": 5,
+        "title": "كتاب التطوع",
+        "first": 1250,
+        "last": 1370,
+        "count": 121
+      },
+      {
+        "number": 6,
+        "title": "كتاب شهر رمضان",
+        "first": 1371,
+        "last": 1400,
+        "count": 30
+      },
+      {
+        "number": 7,
+        "title": "كتاب سجود القرآن",
+        "first": 1401,
+        "last": 1415,
+        "count": 15
+      },
+      {
+        "number": 8,
+        "title": "كتاب الوتر",
+        "first": 1416,
+        "last": 1555,
+        "count": 140
+      },
+      {
+        "number": 9,
+        "title": "كتاب الزكاة",
+        "first": 1556,
+        "last": 1700,
+        "count": 145
+      },
+      {
+        "number": 10,
+        "title": "كتاب اللقطة",
+        "first": 1701,
+        "last": 1720,
+        "count": 20
+      },
+      {
+        "number": 11,
+        "title": "كتاب المناسك",
+        "first": 1721,
+        "last": 2045,
+        "count": 325
+      },
+      {
+        "number": 12,
+        "title": "كتاب النكاح",
+        "first": 2046,
+        "last": 2174,
+        "count": 129
+      },
+      {
+        "number": 13,
+        "title": "كتاب الطلاق",
+        "first": 2175,
+        "last": 2312,
+        "count": 138
+      },
+      {
+        "number": 14,
+        "title": "كتاب الصوم",
+        "first": 2313,
+        "last": 2476,
+        "count": 164
+      },
+      {
+        "number": 15,
+        "title": "كتاب الجهاد",
+        "first": 2477,
+        "last": 2787,
+        "count": 311
+      },
+      {
+        "number": 16,
+        "title": "كتاب الضحايا",
+        "first": 2788,
+        "last": 2843,
+        "count": 56
+      },
+      {
+        "number": 17,
+        "title": "كتاب الصيد",
+        "first": 2844,
+        "last": 2861,
+        "count": 18
+      },
+      {
+        "number": 18,
+        "title": "كتاب الوصايا",
+        "first": 2862,
+        "last": 2884,
+        "count": 23
+      },
+      {
+        "number": 19,
+        "title": "كتاب الفرائض",
+        "first": 2885,
+        "last": 2927,
+        "count": 43
+      },
+      {
+        "number": 20,
+        "title": "كتاب الخراج والإمارة والفىء",
+        "first": 2928,
+        "last": 3088,
+        "count": 161
+      },
+      {
+        "number": 21,
+        "title": "كتاب الجنائز",
+        "first": 3089,
+        "last": 3241,
+        "count": 153
+      },
+      {
+        "number": 22,
+        "title": "كتاب الأيمان والنذور",
+        "first": 3242,
+        "last": 3325,
+        "count": 84
+      },
+      {
+        "number": 23,
+        "title": "كتاب البيوع",
+        "first": 3326,
+        "last": 3415,
+        "count": 90
+      },
+      {
+        "number": 24,
+        "title": "كتاب الإجارة",
+        "first": 3416,
+        "last": 3570,
+        "count": 155
+      },
+      {
+        "number": 25,
+        "title": "كتاب الأقضية",
+        "first": 3571,
+        "last": 3640,
+        "count": 70
+      },
+      {
+        "number": 26,
+        "title": "كتاب العلم",
+        "first": 3641,
+        "last": 3668,
+        "count": 28
+      },
+      {
+        "number": 27,
+        "title": "كتاب الأشربة",
+        "first": 3669,
+        "last": 3735,
+        "count": 67
+      },
+      {
+        "number": 28,
+        "title": "كتاب الأطعمة",
+        "first": 3736,
+        "last": 3854,
+        "count": 119
+      },
+      {
+        "number": 29,
+        "title": "كتاب الطب",
+        "first": 3855,
+        "last": 3903,
+        "count": 49
+      },
+      {
+        "number": 30,
+        "title": "كتاب الكهانة و التطير",
+        "first": 3904,
+        "last": 3925,
+        "count": 22
+      },
+      {
+        "number": 31,
+        "title": "كتاب العتق",
+        "first": 3926,
+        "last": 3968,
+        "count": 43
+      },
+      {
+        "number": 32,
+        "title": "كتاب الحروف والقراءات",
+        "first": 3969,
+        "last": 4008,
+        "count": 40
+      },
+      {
+        "number": 33,
+        "title": "كتاب الحمَّام",
+        "first": 4009,
+        "last": 4019,
+        "count": 11
+      },
+      {
+        "number": 34,
+        "title": "كتاب اللباس",
+        "first": 4020,
+        "last": 4158,
+        "count": 139
+      },
+      {
+        "number": 35,
+        "title": "كتاب الترجل",
+        "first": 4159,
+        "last": 4213,
+        "count": 55
+      },
+      {
+        "number": 36,
+        "title": "كتاب الخاتم",
+        "first": 4214,
+        "last": 4239,
+        "count": 26
+      },
+      {
+        "number": 37,
+        "title": "كتاب الفتن والملاحم",
+        "first": 4240,
+        "last": 4278,
+        "count": 39
+      },
+      {
+        "number": 38,
+        "title": "كتاب المهدى",
+        "first": 4279,
+        "last": 4290,
+        "count": 12
+      },
+      {
+        "number": 39,
+        "title": "كتاب الملاحم",
+        "first": 4291,
+        "last": 4350,
+        "count": 60
+      },
+      {
+        "number": 40,
+        "title": "كتاب الحدود",
+        "first": 4351,
+        "last": 4493,
+        "count": 143
+      },
+      {
+        "number": 41,
+        "title": "كتاب الديات",
+        "first": 4494,
+        "last": 4595,
+        "count": 102
+      },
+      {
+        "number": 42,
+        "title": "كتاب السنة",
+        "first": 4596,
+        "last": 4772,
+        "count": 177
+      },
+      {
+        "number": 43,
+        "title": "كتاب الأدب",
+        "first": 4773,
+        "last": 5274,
+        "count": 502
+      }
+    ]
+  },
+  {
+    "key": "tirmidhi",
+    "edition": "ara-tirmidhi",
+    "title": "جامع الترمذي",
+    "author": "الإمام أبو عيسى محمد بن عيسى الترمذي",
+    "group": "sunan",
+    "hadithCount": 3998,
+    "hasGrades": true,
+    "sections": [
+      {
+        "number": 1,
+        "title": "كتاب الطهارة عن رسول الله صلى الله عليه وسلم",
+        "first": 1,
+        "last": 148,
+        "count": 148
+      },
+      {
+        "number": 2,
+        "title": "كتاب الصلاة",
+        "first": 149,
+        "last": 451,
+        "count": 304
+      },
+      {
+        "number": 3,
+        "title": "أَبْوَابُ الْوِتْرِ",
+        "first": 452,
+        "last": 487,
+        "count": 36
+      },
+      {
+        "number": 4,
+        "title": "كِتَاب الْجُمُعَةِ عَنْ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+        "first": 488,
+        "last": 529,
+        "count": 42
+      },
+      {
+        "number": 5,
+        "title": "أَبْوَابُ الْعِيدَيْنِ عَنْ رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+        "first": 530,
+        "last": 543,
+        "count": 14
+      },
+      {
+        "number": 6,
+        "title": "أَبْوَابُ السَّفَرِ",
+        "first": 544,
+        "last": 616,
+        "count": 73
+      },
+      {
+        "number": 7,
+        "title": "كتاب الزكاة عن رسول الله صلى الله عليه وسلم",
+        "first": 617,
+        "last": 681,
+        "count": 65
+      },
+      {
+        "number": 8,
+        "title": "كتاب الصوم عن رسول الله صلى الله عليه وسلم",
+        "first": 682,
+        "last": 808,
+        "count": 127
+      },
+      {
+        "number": 9,
+        "title": "كتاب الحج عن رسول الله صلى الله عليه وسلم",
+        "first": 809,
+        "last": 964,
+        "count": 157
+      },
+      {
+        "number": 10,
+        "title": "كتاب الجنائز عن رسول الله صلى الله عليه وسلم",
+        "first": 965,
+        "last": 1079,
+        "count": 115
+      },
+      {
+        "number": 11,
+        "title": "كتاب النكاح عن رسول الله صلى الله عليه وسلم",
+        "first": 1080,
+        "last": 1145,
+        "count": 67
+      },
+      {
+        "number": 12,
+        "title": "كتاب الرضاع",
+        "first": 1146,
+        "last": 1174,
+        "count": 29
+      },
+      {
+        "number": 13,
+        "title": "كتاب الطلاق واللعان عن رسول الله صلى الله عليه وسلم",
+        "first": 1175,
+        "last": 1204,
+        "count": 31
+      },
+      {
+        "number": 14,
+        "title": "كتاب البيوع عن رسول الله صلى الله عليه وسلم",
+        "first": 1205,
+        "last": 1321,
+        "count": 117
+      },
+      {
+        "number": 15,
+        "title": "كتاب الأحكام عن رسول الله صلى الله عليه وسلم",
+        "first": 1322,
+        "last": 1385,
+        "count": 64
+      },
+      {
+        "number": 16,
+        "title": "كتاب الديات عن رسول الله صلى الله عليه وسلم",
+        "first": 1386,
+        "last": 1422,
+        "count": 37
+      },
+      {
+        "number": 17,
+        "title": "كتاب الحدود عن رسول الله صلى الله عليه وسلم",
+        "first": 1423,
+        "last": 1463,
+        "count": 45
+      },
+      {
+        "number": 18,
+        "title": "كتاب الصيد والذبائح عن رسول الله صلى الله عليه وسلم",
+        "first": 1464,
+        "last": 1492,
+        "count": 29
+      },
+      {
+        "number": 19,
+        "title": "كتاب الأضاحى عن رسول الله صلى الله عليه وسلم",
+        "first": 1493,
+        "last": 1523,
+        "count": 31
+      },
+      {
+        "number": 20,
+        "title": "كتاب النذور والأيمان عن رسول الله صلى الله عليه وسلم",
+        "first": 1524,
+        "last": 1547,
+        "count": 24
+      },
+      {
+        "number": 21,
+        "title": "كتاب السير عن رسول الله صلى الله عليه وسلم",
+        "first": 1548,
+        "last": 1618,
+        "count": 72
+      },
+      {
+        "number": 22,
+        "title": "كتاب فضائل الجهاد عن رسول الله صلى الله عليه وسلم",
+        "first": 1619,
+        "last": 1669,
+        "count": 51
+      },
+      {
+        "number": 23,
+        "title": "كتاب الجهاد عن رسول الله صلى الله عليه وسلم",
+        "first": 1670,
+        "last": 1719,
+        "count": 50
+      },
+      {
+        "number": 24,
+        "title": "كتاب اللباس",
+        "first": 1720,
+        "last": 1787,
+        "count": 68
+      },
+      {
+        "number": 25,
+        "title": "كتاب الأطعمة عن رسول الله صلى الله عليه وسلم",
+        "first": 1788,
+        "last": 1860,
+        "count": 73
+      },
+      {
+        "number": 26,
+        "title": "كتاب الأشربة عن رسول الله صلى الله عليه وسلم",
+        "first": 1861,
+        "last": 1896,
+        "count": 37
+      },
+      {
+        "number": 27,
+        "title": "كتاب البر والصلة عن رسول الله صلى الله عليه وسلم",
+        "first": 1897,
+        "last": 2035,
+        "count": 141
+      },
+      {
+        "number": 28,
+        "title": "كتاب الطب عن رسول اللَّهِ صلى الله عليه وسلم",
+        "first": 2036,
+        "last": 2089,
+        "count": 54
+      },
+      {
+        "number": 29,
+        "title": "كتاب الفرائض عن رسول الله صلى الله عليه وسلم",
+        "first": 2090,
+        "last": 2115,
+        "count": 26
+      },
+      {
+        "number": 30,
+        "title": "كتاب الوصايا عن رسول الله صلى الله عليه وسلم",
+        "first": 2116,
+        "last": 2124,
+        "count": 9
+      },
+      {
+        "number": 31,
+        "title": "كتاب الولاء والهبة عن رسول الله صلى الله عليه وسلم",
+        "first": 2125,
+        "last": 2132,
+        "count": 8
+      },
+      {
+        "number": 32,
+        "title": "كتاب القدر عن رسول الله صلى الله عليه وسلم",
+        "first": 2133,
+        "last": 2157,
+        "count": 26
+      },
+      {
+        "number": 33,
+        "title": "كتاب الفتن عن رسول الله صلى الله عليه وسلم",
+        "first": 2158,
+        "last": 2269,
+        "count": 112
+      },
+      {
+        "number": 34,
+        "title": "كتاب الرؤيا عن رسول الله صلى الله عليه وسلم",
+        "first": 2270,
+        "last": 2294,
+        "count": 25
+      },
+      {
+        "number": 35,
+        "title": "كتاب الشهادات عن رسول الله صلى الله عليه وسلم",
+        "first": 2295,
+        "last": 2303,
+        "count": 9
+      },
+      {
+        "number": 36,
+        "title": "كتاب الزهد عن رسول الله صلى الله عليه وسلم",
+        "first": 2304,
+        "last": 2414,
+        "count": 111
+      },
+      {
+        "number": 37,
+        "title": "كتاب صفة القيامة والرقائق والورع عن رسول الله صلى الله",
+        "first": 2415,
+        "last": 2522,
+        "count": 108
+      },
+      {
+        "number": 38,
+        "title": "كتاب صفة الجنة عن رسول الله صلى الله عليه وسلم",
+        "first": 2523,
+        "last": 2572,
+        "count": 51
+      },
+      {
+        "number": 39,
+        "title": "كتاب صفة جهنم عن رسول الله صلى الله عليه وسلم",
+        "first": 2573,
+        "last": 2605,
+        "count": 34
+      },
+      {
+        "number": 40,
+        "title": "كتاب الإيمان عن رسول الله صلى الله عليه وسلم",
+        "first": 2606,
+        "last": 2644,
+        "count": 39
+      },
+      {
+        "number": 41,
+        "title": "كتاب العلم عن رسول الله صلى الله عليه وسلم",
+        "first": 2645,
+        "last": 2687,
+        "count": 43
+      },
+      {
+        "number": 42,
+        "title": "كتاب الاستئذان والآداب عن رسول الله صلى الله عليه وسلم",
+        "first": 2688,
+        "last": 2734,
+        "count": 47
+      },
+      {
+        "number": 43,
+        "title": "كتاب الأدب عن رسول الله صلى الله عليه وسلم",
+        "first": 2736,
+        "last": 2858,
+        "count": 138
+      },
+      {
+        "number": 44,
+        "title": "كتاب الأمثال عن رسول الله صلى الله عليه وسلم",
+        "first": 2859,
+        "last": 2874,
+        "count": 17
+      },
+      {
+        "number": 45,
+        "title": "كتاب ثواب القرآن عن رسول الله صلى الله عليه وسلم",
+        "first": 2875,
+        "last": 2926,
+        "count": 52
+      },
+      {
+        "number": 46,
+        "title": "كتاب القراءات عن رسول الله صلى الله عليه وسلم",
+        "first": 2927,
+        "last": 2949,
+        "count": 23
+      },
+      {
+        "number": 47,
+        "title": "كتاب تفسير القرآن عن رسول الله صلى الله عليه وسلم",
+        "first": 2950,
+        "last": 3369,
+        "count": 424
+      },
+      {
+        "number": 48,
+        "title": "كتاب الدعوات عن رسول الله صلى الله عليه وسلم",
+        "first": 3370,
+        "last": 3604.1,
+        "count": 244
+      },
+      {
+        "number": 49,
+        "title": "كتاب المناقب عن رسول الله صلى الله عليه وسلم",
+        "first": 3605,
+        "last": 3956,
+        "count": 351
+      }
+    ]
+  },
+  {
+    "key": "nasai",
+    "edition": "ara-nasai",
+    "title": "سنن النسائي",
+    "author": "الإمام أبو عبد الرحمن أحمد بن شعيب النسائي",
+    "group": "sunan",
+    "hadithCount": 5765,
+    "hasGrades": true,
+    "sections": [
+      {
+        "number": 1,
+        "title": "كتاب الطهارة",
+        "first": 1,
+        "last": 324,
+        "count": 324
+      },
+      {
+        "number": 2,
+        "title": "كتاب المياه",
+        "first": 325,
+        "last": 347,
+        "count": 23
+      },
+      {
+        "number": 3,
+        "title": "كتاب الحيض والاستحاضة",
+        "first": 348,
+        "last": 395,
+        "count": 49
+      },
+      {
+        "number": 4,
+        "title": "كتاب الغسل والتيمم",
+        "first": 396,
+        "last": 447,
+        "count": 53
+      },
+      {
+        "number": 5,
+        "title": "كتاب الصلاة",
+        "first": 448,
+        "last": 493,
+        "count": 46
+      },
+      {
+        "number": 6,
+        "title": "كتاب المواقيت",
+        "first": 494,
+        "last": 625,
+        "count": 132
+      },
+      {
+        "number": 7,
+        "title": "كتاب الأذان",
+        "first": 626,
+        "last": 687,
+        "count": 62
+      },
+      {
+        "number": 8,
+        "title": "كتاب المساجد",
+        "first": 688,
+        "last": 741,
+        "count": 54
+      },
+      {
+        "number": 9,
+        "title": "كتاب القبلة",
+        "first": 742,
+        "last": 776,
+        "count": 35
+      },
+      {
+        "number": 10,
+        "title": "كتاب الإمامة",
+        "first": 777,
+        "last": 875,
+        "count": 99
+      },
+      {
+        "number": 11,
+        "title": "كتاب الافتتاح",
+        "first": 876,
+        "last": 1028,
+        "count": 153
+      },
+      {
+        "number": 12,
+        "title": "كتاب التطبيق",
+        "first": 1029,
+        "last": 1178,
+        "count": 150
+      },
+      {
+        "number": 13,
+        "title": "كتاب السهو",
+        "first": 1179,
+        "last": 1366,
+        "count": 188
+      },
+      {
+        "number": 14,
+        "title": "كتاب الجمعة",
+        "first": 1367,
+        "last": 1432,
+        "count": 66
+      },
+      {
+        "number": 15,
+        "title": "كتاب تقصير الصلاة فى السفر",
+        "first": 1433,
+        "last": 1458,
+        "count": 26
+      },
+      {
+        "number": 16,
+        "title": "كتاب الكسوف",
+        "first": 1459,
+        "last": 1503,
+        "count": 45
+      },
+      {
+        "number": 17,
+        "title": "كتاب الاستسقاء",
+        "first": 1504,
+        "last": 1528,
+        "count": 25
+      },
+      {
+        "number": 18,
+        "title": "كتاب صلاة الخوف",
+        "first": 1529,
+        "last": 1555,
+        "count": 27
+      },
+      {
+        "number": 19,
+        "title": "كتاب صلاة العيدين",
+        "first": 1556,
+        "last": 1597,
+        "count": 42
+      },
+      {
+        "number": 20,
+        "title": "كتاب قيام الليل وتطوع النهار",
+        "first": 1598,
+        "last": 1817,
+        "count": 220
+      },
+      {
+        "number": 21,
+        "title": "كتاب الجنائز",
+        "first": 1818,
+        "last": 2089,
+        "count": 272
+      },
+      {
+        "number": 22,
+        "title": "كتاب الصيام",
+        "first": 2090,
+        "last": 2434,
+        "count": 345
+      },
+      {
+        "number": 23,
+        "title": "كتاب الزكاة",
+        "first": 2435,
+        "last": 2618,
+        "count": 184
+      },
+      {
+        "number": 24,
+        "title": "كتاب مناسك الحج",
+        "first": 2619,
+        "last": 3084,
+        "count": 467
+      },
+      {
+        "number": 25,
+        "title": "كتاب الجهاد",
+        "first": 3085,
+        "last": 3195,
+        "count": 111
+      },
+      {
+        "number": 26,
+        "title": "كتاب النكاح",
+        "first": 3196,
+        "last": 3388,
+        "count": 193
+      },
+      {
+        "number": 27,
+        "title": "كتاب الطلاق",
+        "first": 3389,
+        "last": 3560,
+        "count": 174
+      },
+      {
+        "number": 28,
+        "title": "كتاب الخيل",
+        "first": 3561,
+        "last": 3593,
+        "count": 33
+      },
+      {
+        "number": 29,
+        "title": "كتاب الإحباس",
+        "first": 3594,
+        "last": 3610,
+        "count": 17
+      },
+      {
+        "number": 30,
+        "title": "كتاب الوصايا",
+        "first": 3611,
+        "last": 3671,
+        "count": 61
+      },
+      {
+        "number": 31,
+        "title": "كتاب النحل",
+        "first": 3672,
+        "last": 3687,
+        "count": 16
+      },
+      {
+        "number": 32,
+        "title": "كتاب الهبة",
+        "first": 3688,
+        "last": 3705,
+        "count": 18
+      },
+      {
+        "number": 33,
+        "title": "كتاب الرقبى",
+        "first": 3706,
+        "last": 3719,
+        "count": 14
+      },
+      {
+        "number": 34,
+        "title": "كتاب العمرى",
+        "first": 3720,
+        "last": 3760,
+        "count": 42
+      },
+      {
+        "number": 35,
+        "title": "كتاب المزارعة",
+        "first": 3761,
+        "last": 3938,
+        "count": 178
+      },
+      {
+        "number": 36,
+        "title": "كتاب عشرة النساء",
+        "first": 3939,
+        "last": 3965,
+        "count": 27
+      },
+      {
+        "number": 37,
+        "title": "كتاب تحريم الدم",
+        "first": 3966,
+        "last": 4132,
+        "count": 167
+      },
+      {
+        "number": 38,
+        "title": "كتاب قسم الفىء",
+        "first": 4133,
+        "last": 4148,
+        "count": 16
+      },
+      {
+        "number": 39,
+        "title": "كتاب البيعة",
+        "first": 4149,
+        "last": 4211,
+        "count": 63
+      },
+      {
+        "number": 40,
+        "title": "كتاب العقيقة",
+        "first": 4212,
+        "last": 4221,
+        "count": 10
+      },
+      {
+        "number": 41,
+        "title": "كتاب الفرع والعتيرة",
+        "first": 4222,
+        "last": 4262,
+        "count": 41
+      },
+      {
+        "number": 42,
+        "title": "كتاب الصيد والذبائح",
+        "first": 4263,
+        "last": 4360,
+        "count": 98
+      },
+      {
+        "number": 43,
+        "title": "كتاب الضحايا",
+        "first": 4361,
+        "last": 4448,
+        "count": 88
+      },
+      {
+        "number": 44,
+        "title": "كتاب البيوع",
+        "first": 4449,
+        "last": 4705,
+        "count": 257
+      },
+      {
+        "number": 45,
+        "title": "كتاب القسامة",
+        "first": 4706,
+        "last": 4869,
+        "count": 164
+      },
+      {
+        "number": 46,
+        "title": "كتاب قطع السارق",
+        "first": 4870,
+        "last": 4984,
+        "count": 115
+      },
+      {
+        "number": 47,
+        "title": "كتاب الإيمان وشرائعه",
+        "first": 4985,
+        "last": 5039,
+        "count": 55
+      },
+      {
+        "number": 48,
+        "title": "كتاب الزينة من السنن",
+        "first": 5040,
+        "last": 5378,
+        "count": 339
+      },
+      {
+        "number": 49,
+        "title": "كتاب آداب القضاة",
+        "first": 5379,
+        "last": 5427,
+        "count": 49
+      },
+      {
+        "number": 50,
+        "title": "كتاب الاستعاذة",
+        "first": 5428,
+        "last": 5539,
+        "count": 112
+      },
+      {
+        "number": 51,
+        "title": "كتاب الأشربة",
+        "first": 5540,
+        "last": 5758,
+        "count": 220
+      }
+    ]
+  },
+  {
+    "key": "ibnmajah",
+    "edition": "ara-ibnmajah",
+    "title": "سنن ابن ماجه",
+    "author": "الإمام محمد بن يزيد بن ماجه القزويني",
+    "group": "sunan",
+    "hadithCount": 4343,
+    "hasGrades": true,
+    "sections": [
+      {
+        "number": 0,
+        "title": "كتاب المقدمة",
+        "first": 1,
+        "last": 266,
+        "count": 266
+      },
+      {
+        "number": 1,
+        "title": "كتاب الطهارة وسننها",
+        "first": 267,
+        "last": 666,
+        "count": 400
+      },
+      {
+        "number": 2,
+        "title": "كتاب الصلاة",
+        "first": 667,
+        "last": 705,
+        "count": 39
+      },
+      {
+        "number": 3,
+        "title": "كتاب الأذان والسنة فيها",
+        "first": 706,
+        "last": 734,
+        "count": 29
+      },
+      {
+        "number": 4,
+        "title": "كتاب المساجد والجماعات",
+        "first": 735,
+        "last": 802,
+        "count": 68
+      },
+      {
+        "number": 5,
+        "title": "كتاب إقامة الصلاة والسنة فيها",
+        "first": 803,
+        "last": 1432,
+        "count": 630
+      },
+      {
+        "number": 6,
+        "title": "كتاب الجنائز",
+        "first": 1433,
+        "last": 1637,
+        "count": 205
+      },
+      {
+        "number": 7,
+        "title": "كتاب الصيام",
+        "first": 1638,
+        "last": 1782,
+        "count": 145
+      },
+      {
+        "number": 8,
+        "title": "كتاب الزكاة",
+        "first": 1783,
+        "last": 1844,
+        "count": 62
+      },
+      {
+        "number": 9,
+        "title": "كتاب النكاح",
+        "first": 1845,
+        "last": 2015,
+        "count": 171
+      },
+      {
+        "number": 10,
+        "title": "كتاب الطلاق",
+        "first": 2016,
+        "last": 2089,
+        "count": 78
+      },
+      {
+        "number": 11,
+        "title": "كتاب الكفارات",
+        "first": 2090,
+        "last": 2136,
+        "count": 47
+      },
+      {
+        "number": 12,
+        "title": "كتاب التجارات",
+        "first": 2137,
+        "last": 2307,
+        "count": 171
+      },
+      {
+        "number": 13,
+        "title": "كتاب الأحكام",
+        "first": 2308,
+        "last": 2374,
+        "count": 67
+      },
+      {
+        "number": 14,
+        "title": "كتاب الهبات",
+        "first": 2375,
+        "last": 2389,
+        "count": 15
+      },
+      {
+        "number": 15,
+        "title": "كتاب الصدقات",
+        "first": 2390,
+        "last": 2434,
+        "count": 46
+      },
+      {
+        "number": 16,
+        "title": "كتاب الرهون",
+        "first": 2436,
+        "last": 2491,
+        "count": 53
+      },
+      {
+        "number": 17,
+        "title": "كتاب الشفعة",
+        "first": 2492,
+        "last": 2501,
+        "count": 10
+      },
+      {
+        "number": 18,
+        "title": "كتاب اللقطة",
+        "first": 2502,
+        "last": 2511,
+        "count": 10
+      },
+      {
+        "number": 19,
+        "title": "كتاب العتق",
+        "first": 2512,
+        "last": 2532,
+        "count": 20
+      },
+      {
+        "number": 20,
+        "title": "كتاب الحدود",
+        "first": 2533,
+        "last": 2614,
+        "count": 82
+      },
+      {
+        "number": 21,
+        "title": "كتاب الديات",
+        "first": 2615,
+        "last": 2694,
+        "count": 80
+      },
+      {
+        "number": 22,
+        "title": "كتاب الوصايا",
+        "first": 2695,
+        "last": 2718,
+        "count": 24
+      },
+      {
+        "number": 23,
+        "title": "كتاب الفرائض",
+        "first": 2719,
+        "last": 2752,
+        "count": 34
+      },
+      {
+        "number": 24,
+        "title": "كتاب الجهاد",
+        "first": 2753,
+        "last": 2881,
+        "count": 129
+      },
+      {
+        "number": 25,
+        "title": "كتاب المناسك",
+        "first": 2882,
+        "last": 3119,
+        "count": 238
+      },
+      {
+        "number": 26,
+        "title": "كتاب الأضاحي",
+        "first": 3120,
+        "last": 3161,
+        "count": 42
+      },
+      {
+        "number": 27,
+        "title": "كتاب الذبائح",
+        "first": 3162,
+        "last": 3199,
+        "count": 38
+      },
+      {
+        "number": 28,
+        "title": "كتاب الصيد",
+        "first": 3200,
+        "last": 3250,
+        "count": 51
+      },
+      {
+        "number": 29,
+        "title": "كتاب الأطعمة",
+        "first": 3251,
+        "last": 3370,
+        "count": 120
+      },
+      {
+        "number": 30,
+        "title": "كتاب الأشربة",
+        "first": 3371,
+        "last": 3435,
+        "count": 65
+      },
+      {
+        "number": 31,
+        "title": "كتاب الطب",
+        "first": 3436,
+        "last": 3549,
+        "count": 114
+      },
+      {
+        "number": 32,
+        "title": "كتاب اللباس",
+        "first": 3550,
+        "last": 3656,
+        "count": 107
+      },
+      {
+        "number": 33,
+        "title": "كتاب الأدب",
+        "first": 3657,
+        "last": 3826,
+        "count": 170
+      },
+      {
+        "number": 34,
+        "title": "كتاب الدعاء",
+        "first": 3827,
+        "last": 3892,
+        "count": 66
+      },
+      {
+        "number": 35,
+        "title": "كتاب تعبير الرؤيا",
+        "first": 3893,
+        "last": 3926,
+        "count": 34
+      },
+      {
+        "number": 36,
+        "title": "كتاب الفتن",
+        "first": 3927,
+        "last": 4099,
+        "count": 175
+      },
+      {
+        "number": 37,
+        "title": "كتاب الزهد",
+        "first": 4100,
+        "last": 4341,
+        "count": 242
+      }
+    ]
+  },
+  {
+    "key": "malik",
+    "edition": "ara-malik",
+    "title": "موطأ مالك",
+    "author": "الإمام مالك بن أنس",
+    "group": "other",
+    "hadithCount": 1858,
+    "hasGrades": true,
+    "sections": [
+      {
+        "number": 1,
+        "title": "كتاب وقوت الصلاة",
+        "first": 1,
+        "last": 31,
+        "count": 31
+      },
+      {
+        "number": 2,
+        "title": "كتاب الطهارة",
+        "first": 32,
+        "last": 145,
+        "count": 114
+      },
+      {
+        "number": 3,
+        "title": "كتاب الصلاة",
+        "first": 146,
+        "last": 221,
+        "count": 76
+      },
+      {
+        "number": 4,
+        "title": "كتاب السهو",
+        "first": 222,
+        "last": 224,
+        "count": 3
+      },
+      {
+        "number": 5,
+        "title": "كتاب الجمعة",
+        "first": 225,
+        "last": 245,
+        "count": 21
+      },
+      {
+        "number": 6,
+        "title": "كتاب الصلاة فى رمضان",
+        "first": 246,
+        "last": 253,
+        "count": 8
+      },
+      {
+        "number": 7,
+        "title": "كتاب صلاة الليل",
+        "first": 254,
+        "last": 286,
+        "count": 33
+      },
+      {
+        "number": 8,
+        "title": "كتاب صلاة الجماعة",
+        "first": 287,
+        "last": 325,
+        "count": 39
+      },
+      {
+        "number": 9,
+        "title": "كتاب قصر الصلاة فى السفر",
+        "first": 326,
+        "last": 427,
+        "count": 102
+      },
+      {
+        "number": 10,
+        "title": "كتاب العيدين",
+        "first": 428,
+        "last": 440,
+        "count": 13
+      },
+      {
+        "number": 11,
+        "title": "كتاب صلاة الخوف",
+        "first": 441,
+        "last": 444,
+        "count": 4
+      },
+      {
+        "number": 12,
+        "title": "كتاب صلاة الكسوف",
+        "first": 445,
+        "last": 448,
+        "count": 4
+      },
+      {
+        "number": 13,
+        "title": "كتاب الاستسقاء",
+        "first": 449,
+        "last": 454,
+        "count": 6
+      },
+      {
+        "number": 14,
+        "title": "كتاب القبلة",
+        "first": 455,
+        "last": 469,
+        "count": 15
+      },
+      {
+        "number": 15,
+        "title": "كتاب القرآن",
+        "first": 470,
+        "last": 519,
+        "count": 50
+      },
+      {
+        "number": 16,
+        "title": "كتاب الجنائز",
+        "first": 520,
+        "last": 577,
+        "count": 58
+      },
+      {
+        "number": 17,
+        "title": "كتاب الزكاة",
+        "first": 578,
+        "last": 629,
+        "count": 52
+      },
+      {
+        "number": 18,
+        "title": "كتاب الصيام",
+        "first": 630,
+        "last": 689,
+        "count": 60
+      },
+      {
+        "number": 19,
+        "title": "كتاب الاعتكاف",
+        "first": 690,
+        "last": 704,
+        "count": 15
+      },
+      {
+        "number": 20,
+        "title": "كتاب الحج",
+        "first": 705,
+        "last": 958,
+        "count": 254
+      },
+      {
+        "number": 21,
+        "title": "كتاب الجهاد",
+        "first": 959,
+        "last": 1008,
+        "count": 50
+      },
+      {
+        "number": 22,
+        "title": "كتاب النذور والأيمان",
+        "first": 1009,
+        "last": 1027,
+        "count": 19
+      },
+      {
+        "number": 23,
+        "title": "كتاب الضحايا",
+        "first": 1028,
+        "last": 1041,
+        "count": 14
+      },
+      {
+        "number": 24,
+        "title": "كتاب الذبائح",
+        "first": 1042,
+        "last": 1051,
+        "count": 10
+      },
+      {
+        "number": 25,
+        "title": "كتاب الصيد",
+        "first": 1052,
+        "last": 1066,
+        "count": 15
+      },
+      {
+        "number": 26,
+        "title": "كتاب العقيقة",
+        "first": 1067,
+        "last": 1073,
+        "count": 7
+      },
+      {
+        "number": 27,
+        "title": "كتاب الفرائض",
+        "first": 1074,
+        "last": 1090,
+        "count": 17
+      },
+      {
+        "number": 28,
+        "title": "كتاب النكاح",
+        "first": 1091,
+        "last": 1149,
+        "count": 59
+      },
+      {
+        "number": 29,
+        "title": "كتاب الطلاق",
+        "first": 1150,
+        "last": 1271,
+        "count": 122
+      },
+      {
+        "number": 30,
+        "title": "كتاب الرضاع",
+        "first": 1272,
+        "last": 1289,
+        "count": 18
+      },
+      {
+        "number": 31,
+        "title": "كتاب البيوع",
+        "first": 1290,
+        "last": 1385,
+        "count": 96
+      },
+      {
+        "number": 32,
+        "title": "كتاب القراض",
+        "first": 1386,
+        "last": 1387,
+        "count": 2
+      },
+      {
+        "number": 33,
+        "title": "كتاب المساقاة",
+        "first": 1388,
+        "last": 1389,
+        "count": 2
+      },
+      {
+        "number": 34,
+        "title": "كتاب كراء الأرض",
+        "first": 1390,
+        "last": 1394,
+        "count": 5
+      },
+      {
+        "number": 35,
+        "title": "كتاب الشفعة",
+        "first": 1395,
+        "last": 1398,
+        "count": 4
+      },
+      {
+        "number": 36,
+        "title": "كتاب الأقضية",
+        "first": 1399,
+        "last": 1454,
+        "count": 56
+      },
+      {
+        "number": 37,
+        "title": "كتاب الوصية",
+        "first": 1455,
+        "last": 1463,
+        "count": 9
+      },
+      {
+        "number": 38,
+        "title": "كتاب العتق والولاء",
+        "first": 1464,
+        "last": 1488,
+        "count": 25
+      },
+      {
+        "number": 39,
+        "title": "كتاب المكاتب",
+        "first": 1489,
+        "last": 1496,
+        "count": 8
+      },
+      {
+        "number": 40,
+        "title": "كتاب المدبر",
+        "first": 1497,
+        "last": 1499,
+        "count": 3
+      },
+      {
+        "number": 41,
+        "title": "كتاب الحدود",
+        "first": 1500,
+        "last": 1536,
+        "count": 37
+      },
+      {
+        "number": 42,
+        "title": "كتاب الأشربة",
+        "first": 1537,
+        "last": 1551,
+        "count": 15
+      },
+      {
+        "number": 43,
+        "title": "كتاب العقول",
+        "first": 1552,
+        "last": 1595,
+        "count": 44
+      },
+      {
+        "number": 44,
+        "title": "كتاب القسامة",
+        "first": 1596,
+        "last": 1597,
+        "count": 2
+      },
+      {
+        "number": 45,
+        "title": "كتاب الْمَدِينَةِ",
+        "first": 1598,
+        "last": 1622,
+        "count": 25
+      },
+      {
+        "number": 46,
+        "title": "كتاب القدر",
+        "first": 1623,
+        "last": 1632,
+        "count": 10
+      },
+      {
+        "number": 47,
+        "title": "كتاب حسن الخلق",
+        "first": 1633,
+        "last": 1650,
+        "count": 18
+      },
+      {
+        "number": 48,
+        "title": "كتاب اللباس",
+        "first": 1651,
+        "last": 1670,
+        "count": 20
+      },
+      {
+        "number": 49,
+        "title": "كتاب صفة النبى صلى الله عليه وسلم",
+        "first": 1671,
+        "last": 1710,
+        "count": 40
+      },
+      {
+        "number": 50,
+        "title": "كتاب العين",
+        "first": 1711,
+        "last": 1729,
+        "count": 19
+      },
+      {
+        "number": 51,
+        "title": "كتاب الشعر",
+        "first": 1730,
+        "last": 1746,
+        "count": 17
+      },
+      {
+        "number": 52,
+        "title": "كتاب الرؤيا",
+        "first": 1747,
+        "last": 1755,
+        "count": 9
+      },
+      {
+        "number": 53,
+        "title": "كتاب السلام",
+        "first": 1756,
+        "last": 1762,
+        "count": 7
+      },
+      {
+        "number": 54,
+        "title": "كتاب الاستئذان",
+        "first": 1763,
+        "last": 1807,
+        "count": 45
+      },
+      {
+        "number": 55,
+        "title": "كتاب البيعة",
+        "first": 1808,
+        "last": 1810,
+        "count": 3
+      },
+      {
+        "number": 56,
+        "title": "كتاب الكلام",
+        "first": 1811,
+        "last": 1838,
+        "count": 28
+      },
+      {
+        "number": 57,
+        "title": "كتاب جهنم",
+        "first": 1839,
+        "last": 1840,
+        "count": 2
+      },
+      {
+        "number": 58,
+        "title": "كتاب الصدقة",
+        "first": 1841,
+        "last": 1855,
+        "count": 15
+      },
+      {
+        "number": 59,
+        "title": "كتاب العلم",
+        "first": 1856,
+        "last": 1856,
+        "count": 1
+      },
+      {
+        "number": 60,
+        "title": "كتاب دعوة المظلوم",
+        "first": 1857,
+        "last": 1857,
+        "count": 1
+      },
+      {
+        "number": 61,
+        "title": "كتاب أسماء النبى صلى الله عليه وسلم",
+        "first": 1858,
+        "last": 1858,
+        "count": 1
+      }
+    ]
+  }
+]
