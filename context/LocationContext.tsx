@@ -56,7 +56,9 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null,
   );
-  const [address, setAddress] = useState<string>("جاري التحميل...");
+  const [address, _setAddress] = useState<string>("جاري التحميل...");
+  const setAddress = (v: string) =>
+    _setAddress(v.replace(/[\s,،‏‎]+$/g, "").replace(/^[\s,،]+/g, ""));
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
