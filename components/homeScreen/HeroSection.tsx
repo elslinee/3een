@@ -21,7 +21,10 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ color }: HeroSectionProps) {
-  const { address, errorMsg, openLocationSettingsAndRefresh } = useLocation();
+  const { address: rawAddress, errorMsg, openLocationSettingsAndRefresh } =
+    useLocation();
+  // Saved addresses from older versions may end with a dangling "، "
+  const address = rawAddress.replace(/[\s,،]+$/, "").replace(/^[\s,،]+/, "");
   const [currentDate, setCurrentDate] = useState({
     hijri: "",
     gregorian: "",

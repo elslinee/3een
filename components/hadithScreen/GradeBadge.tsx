@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FontFamily.regular,
     opacity: 0.8,
-    flexShrink: 1,
+    flexShrink: 0,
   },
 });

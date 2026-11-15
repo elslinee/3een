@@ -278,6 +278,9 @@ export class TranslationService {
       parts.push(this.translate(addressComponents.country));
     }
 
-    return parts.join("، ");
+    return parts
+      .map((p) => p?.trim())
+      .filter(Boolean)
+      .join("، ");
   }
 }

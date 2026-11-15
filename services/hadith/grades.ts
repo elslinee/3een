@@ -120,7 +120,11 @@ export const translateGrader = (name: string): string =>
 
 // Untranslatable strings are shown as-is rather than guessed.
 export const translateGrade = (grade: string): string => {
-  const trimmed = grade.trim();
+  // Drop hadith reference numbers like "(7284, 7285)" — too noisy for a badge.
+  const trimmed = grade
+    .replace(/\(\s*[\d\s,،.\-]*\)/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   const exact = GRADE_TRANSLATIONS[trimmed];
   if (exact) return exact;
 
