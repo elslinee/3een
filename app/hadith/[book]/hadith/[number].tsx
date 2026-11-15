@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: "row",
-    gap: 12,
+    gap: 8,
   },
   actionWrapper: {
     flex: 1,
@@ -380,10 +380,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 6,
+    paddingHorizontal: 6,
   },
   actionText: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: FontFamily.bold,
   },
   navBar: {
