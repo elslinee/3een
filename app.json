@@ -27,7 +27,6 @@
       },
       "backgroundColor": "#FBF5EA",
       "androidNavigationBar": {
-        "backgroundColor": "#FBF5EA",
         "barStyle": "dark-content"
       },
       "edgeToEdgeEnabled": true,
@@ -65,6 +64,8 @@
         }
       ],
       "./plugins/withNoForceDark",
+      "./plugins/withNoStatusBarColor",
+      "./plugins/withProguardOptimize",
       "./plugins/withLegacyBackHandling",
       "expo-audio",
       "expo-font",
