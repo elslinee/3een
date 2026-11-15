@@ -57,8 +57,16 @@ export const LocationProvider: React.FC<LocationProviderProps> = ({
     null,
   );
   const [address, _setAddress] = useState<string>("جاري التحميل...");
+  // Split on any comma, drop blank/invisible-only segments, rejoin cleanly.
+  // Handles old cached values like "أسيوط، " (region + empty country).
   const setAddress = (v: string) =>
-    _setAddress(v.replace(/[\s,،‏‎]+$/g, "").replace(/^[\s,،]+/g, ""));
+    _setAddress(
+      (v ?? "")
+        .split(/[،,]/)
+        .map((s) => s.replace(/[\s‏‎ ]+/g, " ").trim())
+        .filter(Boolean)
+        .join("، ") || (v ?? ""),
+    );
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

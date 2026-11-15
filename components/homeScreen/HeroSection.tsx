@@ -21,10 +21,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ color }: HeroSectionProps) {
-  const { address: rawAddress, errorMsg, openLocationSettingsAndRefresh } =
-    useLocation();
-  // Saved addresses from older versions may end with a dangling "، "
-  const address = rawAddress.replace(/[\s,،]+$/, "").replace(/^[\s,،]+/, "");
+  const { address, errorMsg, openLocationSettingsAndRefresh } = useLocation();
   const [currentDate, setCurrentDate] = useState({
     hijri: "",
     gregorian: "",
@@ -131,6 +128,7 @@ export default function HeroSection({ color }: HeroSectionProps) {
                 </TouchableOpacity>
               ) : (
                 <Text
+                  numberOfLines={1}
                   style={{
                     fontSize: 14,
                     fontFamily: FontFamily.medium,
